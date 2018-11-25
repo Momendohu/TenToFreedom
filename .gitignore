@@ -37,6 +37,7 @@ sysinfo.txt
 
 # External resources directory
 Assets/External/
+Assets/External.meta
 
 # Standard assets directory
 Assets/Standard Assets/
