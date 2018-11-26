@@ -19,7 +19,10 @@ public class Player : MonoBehaviour {
 
     private float attackSpeedRate = 5; //横攻撃時の速度補正
     private float tackleWaitTime = 0.2f; //タックルの待機時間
+
     private Vector3 eyePos = new Vector3(0.384f,0.29f,-5); //目の位置
+    private float blinkProb = 2; //瞬きする確率
+    private float blinkSpeed = 5; //瞬きのスピード
 
 
     //アクションタイプ
@@ -92,6 +95,28 @@ public class Player : MonoBehaviour {
         if(speed.x < 0) {
             eye.transform.localPosition = new Vector3(-eyePos.x,eyePos.y,eyePos.z);
         }
+
+        //瞬き判定
+        if(Random.Range(0,100) >= (100 - blinkProb)) {
+            StartCoroutine(Blink(blinkSpeed));
+        }
+    }
+
+    //=============================================================
+    /// <summary>
+    /// 瞬き
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Blink (float speed) {
+        float time = 0;
+        while(time < 1) {
+            time += Time.fixedDeltaTime * speed;
+            eye.transform.localScale = new Vector3(1,1 - Mathf.Sin(Mathf.Deg2Rad * 180 * time),1);
+
+            yield return null;
+        }
+
+        yield break;
     }
 
     //=============================================================
