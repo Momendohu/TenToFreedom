@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
     //=============================================================
     private Rigidbody2D _rigidbody2D;
     private GameObject eye;
+    private SoundManager soundManager;
 
     private float gravityScale = 2; //重力
 
@@ -38,6 +39,7 @@ public class Player : MonoBehaviour {
     private void CRef () {
         _rigidbody2D = this.GetComponent<Rigidbody2D>();
         eye = transform.Find("Eye").gameObject;
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
     }
 
     //=============================================================
@@ -110,6 +112,8 @@ public class Player : MonoBehaviour {
     /// </summary>
     private void Tackle (float waitTime) {
         if(InputController.IsPushButtonDown(KeyCode.Space)) {
+            soundManager.TriggerSE("SE001");
+
             if(speed.x >= 0) {
                 actionType = ActionType.TackleR;
             } else {
@@ -126,6 +130,7 @@ public class Player : MonoBehaviour {
     /// </summary>
     private void Jump () {
         if(InputController.IsPushButtonDown(KeyCode.UpArrow) || InputController.IsPushButtonDown(KeyCode.W)) {
+            soundManager.TriggerSE("SE002");
             DriveUp(maxJumpPower,3);
         } else {
             Drivedown(0,0.2f);
