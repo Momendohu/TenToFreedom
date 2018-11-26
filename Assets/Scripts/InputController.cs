@@ -21,7 +21,7 @@ public static class InputController {
     /// <param name="code">キーコード</param>
     /// <returns>真偽値</returns>
     public static bool IsPushButtonDown (KeyCode code) {
-        return Input.GetKey(code);
+        return Input.GetKeyDown(code);
     }
 
     /// <summary>
@@ -30,6 +30,6 @@ public static class InputController {
     /// <param name="code">キーコード</param>
     /// <returns>真偽値</returns>
     public static bool IsPushButtonUp (KeyCode code) {
-        return Input.GetKey(code);
+        return Input.GetKeyUp(code);
     }
 }

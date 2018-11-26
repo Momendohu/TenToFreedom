@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     //=============================================================
-    private Vector3 speed = Vector3.zero;
-    private float maxSpeedX = 5;
-    private Vector3 acc = new Vector3(1,0,0);
+    private Vector3 speed = Vector3.zero; //移動スピード(ジャンプ含む)
+    private float maxSpeedX = 0.5f; //最大横速度
+    private Vector3 acc = new Vector3(1,0,0); //加速度
+    private float maxJumpPower = 2; //最大ジャンプ速度
+    private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
 
     //=============================================================
     private void Init () {
@@ -25,7 +27,23 @@ public class Player : MonoBehaviour {
     }
 
     private void Update () {
+        Jump();
         Move();
+
+        //Debug.Log(speed);
+        transform.position += speed;
+    }
+
+    //=============================================================
+    /// <summary>
+    /// ジャンプ
+    /// </summary>
+    private void Jump () {
+        if(InputController.IsPushButtonDown(KeyCode.Space)) {
+            DriveUp(maxJumpPower,3);
+        } else {
+            Drivedown(0,0.2f);
+        }
     }
 
     //=============================================================
@@ -38,7 +56,6 @@ public class Player : MonoBehaviour {
 
         //両方押し
         if(r && l) {
-            transform.position += speed;
             return;
         }
 
@@ -67,16 +84,41 @@ public class Player : MonoBehaviour {
 
     //=============================================================
     /// <summary>
+    /// 上に加速
+    /// </summary>
+    /// <param name="limit">速度制限</param>
+    /// <param name="power">効果の強さ</param>
+    private void DriveUp (float limit,float power) {
+        speed += jumpPower * Time.fixedDeltaTime * power;
+        if(speed.y >= limit) {
+            speed.y = limit;
+        }
+    }
+
+    //=============================================================
+    /// <summary>
+    /// 下に加速
+    /// </summary>
+    /// <param name="limit">速度制限</param>
+    /// <param name="power">効果の強さ</param>
+    private void Drivedown (float limit,float power) {
+        speed -= jumpPower * Time.fixedDeltaTime * power;
+        if(speed.y <= limit) {
+            speed.y = limit;
+        }
+    }
+
+    //=============================================================
+    /// <summary>
     /// 右に加速
     /// </summary>
     /// <param name="limit">速度制限</param>
+    /// <param name="power">効果の強さ</param>
     private void DriveRight (float limit,float power) {
-        speed += acc * Time.fixedDeltaTime*power;
+        speed += acc * Time.fixedDeltaTime * power;
         if(speed.x >= limit) {
             speed.x = limit;
         }
-
-        transform.position += speed;
     }
 
     //=============================================================
@@ -84,12 +126,11 @@ public class Player : MonoBehaviour {
     /// 左に加速
     /// </summary>
     /// <param name="limit">速度制限</param>
+    /// <param name="power">効果の強さ</param>
     private void DriveLeft (float limit,float power) {
-        speed -= acc * Time.fixedDeltaTime*power;
+        speed -= acc * Time.fixedDeltaTime * power;
         if(speed.x <= limit) {
             speed.x = limit;
         }
-
-        transform.position += speed;
     }
 }

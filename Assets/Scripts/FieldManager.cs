@@ -32,7 +32,7 @@ public class FieldManager : MonoBehaviour {
     /// フィールドの作成
     /// </summary>
     private void CreateField () {
-        for(int i = 0;i < 100;i++) {
+        for(int i = 0;i < 1000;i++) {
             CreateBlock(new Vector3(i*blockSize,0,0) + fieldBasePosition);
         }
     }

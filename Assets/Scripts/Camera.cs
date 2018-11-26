@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour {
     //=============================================================
-    private float easingSpeed = 0.2f;
-    private Vector3 marginZ = Vector3.back * 10;
+    private float easingSpeed = 0.2f; //カメラ追従速度
+    private Vector3 marginZ = Vector3.back * 10; //z軸補正(描画されなくなるため)
 
     private GameObject player;
     private Camera cam;
