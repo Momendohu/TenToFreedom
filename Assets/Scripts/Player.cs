@@ -141,9 +141,9 @@ public class Player : MonoBehaviour {
         if(InputController.IsPushButtonDown(KeyCode.Space)) {
             soundManager.TriggerSE("SE001");
 
-            if(speed.x >= 0) {
+            if(speed.x > 0) {
                 actionType = ActionType.TackleR;
-            } else {
+            } else if(speed.x < 0) {
                 actionType = ActionType.TackleL;
             }
 
@@ -249,6 +249,17 @@ public class Player : MonoBehaviour {
         speed -= acc * Time.fixedDeltaTime * power;
         if(speed.x <= limit) {
             speed.x = limit;
+        }
+    }
+
+    //=============================================================
+    /// <summary>
+    /// 衝突判定
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter2D (Collision2D collision) {
+        if(collision.gameObject.tag == "Enemy") {
+            Destroy(collision.gameObject);
         }
     }
 }
