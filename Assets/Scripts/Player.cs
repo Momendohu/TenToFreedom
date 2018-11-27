@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
     private float gravityScale = 2; //重力
 
     private Vector3 speed = Vector3.zero; //移動スピード(ジャンプ含む)
+
     private float maxSpeedX = 0.2f; //最大横速度
     private Vector3 acc = new Vector3(1,0,0); //加速度
     private float maxJumpPower = 1; //最大ジャンプ速度
@@ -139,11 +140,11 @@ public class Player : MonoBehaviour {
     /// </summary>
     private void Tackle (float waitTime) {
         if(InputController.IsPushButtonDown(KeyCode.Space)) {
-            soundManager.TriggerSE("SE001");
-
             if(speed.x > 0) {
+                soundManager.TriggerSE("SE001");
                 actionType = ActionType.TackleR;
             } else if(speed.x < 0) {
+                soundManager.TriggerSE("SE001");
                 actionType = ActionType.TackleL;
             }
 
@@ -158,6 +159,7 @@ public class Player : MonoBehaviour {
     private void Jump () {
         if(InputController.IsPushButtonDown(KeyCode.UpArrow) || InputController.IsPushButtonDown(KeyCode.W)) {
             soundManager.TriggerSE("SE002");
+            _rigidbody2D.velocity = Vector3.zero;
             DriveUp(maxJumpPower,3);
         } else {
             Drivedown(0,0.2f);
@@ -257,9 +259,12 @@ public class Player : MonoBehaviour {
     /// 衝突判定
     /// </summary>
     /// <param name="collision"></param>
-    private void OnCollisionEnter2D (Collision2D collision) {
+    private void OnTriggerEnter2D (Collider2D collision) {
         if(collision.gameObject.tag == "Enemy") {
-            Destroy(collision.gameObject);
+            soundManager.TriggerSE("SE003");
+
+            collision.gameObject.GetComponent<Enemy>().Collide(speed,1);
+            StartCoroutine(collision.gameObject.GetComponent<Enemy>().DestroyAnim(1,5));
         }
     }
 }
