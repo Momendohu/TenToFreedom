@@ -64,12 +64,14 @@ public class Player : MonoBehaviour {
 
             case ActionType.TackleR:
             _rigidbody2D.gravityScale = 0;
+            _rigidbody2D.velocity = Vector3.zero;
             speed.x = maxSpeedX * attackSpeedRate;
             speed.y = 0;
             break;
 
             case ActionType.TackleL:
             _rigidbody2D.gravityScale = 0;
+            _rigidbody2D.velocity = Vector3.zero;
             speed.x = -maxSpeedX * attackSpeedRate;
             speed.y = 0;
             break;
