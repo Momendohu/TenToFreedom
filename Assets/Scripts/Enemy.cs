@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
     //=============================================================
@@ -9,6 +9,22 @@ public class Enemy : MonoBehaviour {
     private BoxCollider2D colTrigger;
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer spriteRenderer;
+    private Slider hpGauge;
+
+    private Vector3 damageTextForwardPos = Vector3.forward * 5; //ダメージ表示を手前に描画するための数値
+
+    /// <summary>
+    /// ステータス
+    /// </summary>
+    private struct State {
+        public float MaxHp;
+        public float Hp;
+    }
+
+    private State state = new State {
+        Hp = 10,
+        MaxHp = 10,
+    };
 
     //=============================================================
     private void Init () {
@@ -21,6 +37,7 @@ public class Enemy : MonoBehaviour {
         colTrigger = GetComponent<BoxCollider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = transform.Find("Image").GetComponent<SpriteRenderer>();
+        hpGauge = transform.Find("Canvas/HpGauge").GetComponent<Slider>();
     }
 
     //=============================================================
@@ -33,7 +50,7 @@ public class Enemy : MonoBehaviour {
     }
 
     private void Update () {
-
+        hpGauge.value = state.Hp / state.MaxHp;
     }
 
     //=============================================================
@@ -70,11 +87,26 @@ public class Enemy : MonoBehaviour {
     /// <summary>
     /// 衝突
     /// </summary>
-    /// <param name="vec"></param>
-    /// <param name="power"></param>
-    public void Collide (Vector2 vec,float power) {
-        _rigidbody2D.velocity += vec * power;
+    /// <param name="vec">吹っ飛ぶ方向</param>
+    /// <param name="power">吹っ飛ぶ力</param>
+    /// <param name="damage">与えるダメージ</param>
+    public void Collide (Vector2 vec,float power,float damage) {
+        _rigidbody2D.velocity += vec * power; //速度加算
+        state.Hp -= damage; //ダメージを与える
+        CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
+
+        //Debug.Log(state.Hp);
+        //hpが0になったら
+        if(state.Hp <= 0) {
+            StartCoroutine(DestroyAnim(1,5));
+        }
 
         //Debug.Log(_rigidbody2D.velocity);
+    }
+
+    //=============================================================
+    private void CreateDamageText (Vector3 pos) {
+        GameObject obj = Instantiate(Resources.Load("Prefabs/DamageText")) as GameObject;
+        obj.transform.position = pos;
     }
 }
