@@ -24,8 +24,8 @@ public class Enemy : MonoBehaviour {
     }
 
     private State state = new State {
-        Hp = 1,
-        MaxHp = 1,
+        Hp = 10,
+        MaxHp = 10,
     };
 
     //=============================================================
