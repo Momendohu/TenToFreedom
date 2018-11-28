@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
     //=============================================================
+    private TimeSlowModule tsm;
+
     private BoxCollider2D col;
     private BoxCollider2D colTrigger;
     private Rigidbody2D _rigidbody2D;
@@ -22,8 +24,8 @@ public class Enemy : MonoBehaviour {
     }
 
     private State state = new State {
-        Hp = 10,
-        MaxHp = 10,
+        Hp = 1,
+        MaxHp = 1,
     };
 
     //=============================================================
@@ -33,6 +35,8 @@ public class Enemy : MonoBehaviour {
 
     //=============================================================
     private void CRef () {
+        tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
+
         col = transform.Find("ColliderBody").GetComponent<BoxCollider2D>();
         colTrigger = GetComponent<BoxCollider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -43,10 +47,6 @@ public class Enemy : MonoBehaviour {
     //=============================================================
     private void Awake () {
         Init();
-    }
-
-    private void Start () {
-
     }
 
     private void Update () {
@@ -75,9 +75,10 @@ public class Enemy : MonoBehaviour {
 
         float time = 0;
         while(time < 1) {
-            time += Time.fixedDeltaTime * speed;
+            Debug.Log(time);
+            time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
             spriteRenderer.color = new Color(1,1,1,1 - time);
-            transform.localScale += Vector3.one * size;
+            transform.localScale += Time.fixedDeltaTime * Vector3.one * size * tsm.GetTimeScale();
 
             yield return null;
         }
@@ -101,6 +102,7 @@ public class Enemy : MonoBehaviour {
         //Debug.Log(state.Hp);
         //hpが0になったら
         if(state.Hp <= 0) {
+            tsm.SlowFlag = true; //スロー処理発動
             StartCoroutine(DestroyAnim(1,5));
         }
     }

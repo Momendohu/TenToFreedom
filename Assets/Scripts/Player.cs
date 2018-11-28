@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     //=============================================================
+    private TimeSlowModule tsm;
+
     private Rigidbody2D _rigidbody2D;
     private GameObject eye;
     private SoundManager soundManager;
@@ -43,6 +45,8 @@ public class Player : MonoBehaviour {
 
     //=============================================================
     private void CRef () {
+        tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
+
         _rigidbody2D = this.GetComponent<Rigidbody2D>();
         eye = transform.Find("Eye").gameObject;
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
@@ -85,7 +89,7 @@ public class Player : MonoBehaviour {
 
 
         //Debug.Log(speed);
-        transform.position += speed;
+        transform.position += speed * tsm.GetTimeScale();
     }
 
     //=============================================================
@@ -115,7 +119,7 @@ public class Player : MonoBehaviour {
     private IEnumerator Blink (float speed) {
         float time = 0;
         while(time < 1) {
-            time += Time.fixedDeltaTime * speed;
+            time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
             eye.transform.localScale = new Vector3(1,1 - Mathf.Sin(Mathf.Deg2Rad * 180 * time),1);
 
             yield return null;
@@ -211,7 +215,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void DriveUp (float limit,float power) {
-        speed += jumpPower * Time.fixedDeltaTime * power;
+        speed += jumpPower * Time.fixedDeltaTime * power * tsm.GetTimeScale();
         if(speed.y >= limit) {
             speed.y = limit;
         }
@@ -224,7 +228,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void Drivedown (float limit,float power) {
-        speed -= jumpPower * Time.fixedDeltaTime * power;
+        speed -= jumpPower * Time.fixedDeltaTime * power * tsm.GetTimeScale();
         if(speed.y <= limit) {
             speed.y = limit;
         }
@@ -237,7 +241,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void DriveRight (float limit,float power) {
-        speed += acc * Time.fixedDeltaTime * power;
+        speed += acc * Time.fixedDeltaTime * power * tsm.GetTimeScale();
         if(speed.x >= limit) {
             speed.x = limit;
         }
@@ -250,7 +254,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void DriveLeft (float limit,float power) {
-        speed -= acc * Time.fixedDeltaTime * power;
+        speed -= acc * Time.fixedDeltaTime * power * tsm.GetTimeScale();
         if(speed.x <= limit) {
             speed.x = limit;
         }
