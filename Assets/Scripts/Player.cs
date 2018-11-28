@@ -25,7 +25,7 @@ public class Player : MonoBehaviour {
     private float blinkProb = 2; //瞬きする確率
     private float blinkSpeed = 5; //瞬きのスピード
 
-    private Vector3 blowUpPower = Vector3.up / 3; //吹っ飛ばし力
+    private Vector3 blowUpPower = Vector3.up / 5; //吹っ飛ばし力
 
 
     //アクションタイプ
@@ -265,7 +265,7 @@ public class Player : MonoBehaviour {
         if(collision.gameObject.tag == "Enemy") {
             soundManager.TriggerSE("SE003");
 
-            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,10,1);
+            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,2,1);
 
         }
     }

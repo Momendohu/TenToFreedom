@@ -61,6 +61,9 @@ public class Enemy : MonoBehaviour {
     /// <param name="speed">アニメーション速度</param>
     /// <returns></returns>
     public IEnumerator DestroyAnim (float size,float speed) {
+        //ゲージ表示を切る
+        hpGauge.gameObject.SetActive(false);
+
         //コライダーを切る
         col.enabled = false;
         colTrigger.enabled = false;
@@ -91,7 +94,7 @@ public class Enemy : MonoBehaviour {
     /// <param name="power">吹っ飛ぶ力</param>
     /// <param name="damage">与えるダメージ</param>
     public void Collide (Vector2 vec,float power,float damage) {
-        _rigidbody2D.velocity += vec * power; //速度加算
+        _rigidbody2D.velocity += vec.normalized * power; //速度加算
         state.Hp -= damage; //ダメージを与える
         CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
 
@@ -100,8 +103,6 @@ public class Enemy : MonoBehaviour {
         if(state.Hp <= 0) {
             StartCoroutine(DestroyAnim(1,5));
         }
-
-        //Debug.Log(_rigidbody2D.velocity);
     }
 
     //=============================================================
