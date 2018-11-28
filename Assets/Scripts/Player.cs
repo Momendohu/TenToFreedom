@@ -273,7 +273,6 @@ public class Player : MonoBehaviour {
             soundManager.TriggerSE("SE003");
 
             collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,3,1);
-
         }
     }
 }
