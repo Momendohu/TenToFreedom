@@ -135,7 +135,12 @@ public class Player : MonoBehaviour {
     /// <param name="time"></param>
     /// <returns></returns>
     private IEnumerator ActionWait (float time) {
-        yield return new WaitForSecondsRealtime(time);
+        float _time = 0;
+        while(_time < time) {
+            _time += Time.fixedDeltaTime * tsm.GetTimeScale();
+
+            yield return null;
+        }
 
         actionType = ActionType.Normal;
     }
