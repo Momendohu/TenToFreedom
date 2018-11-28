@@ -192,24 +192,24 @@ public class Player : MonoBehaviour {
 
         //右
         if(r) {
-            DriveRight(maxSpeedX,1);
+            DriveRight(maxSpeedX,4);
             return;
         }
 
         //左
         if(l) {
-            DriveLeft(-maxSpeedX,1);
+            DriveLeft(-maxSpeedX,4);
             return;
         }
 
         //減速
         if(speed.x > 0) {
-            DriveLeft(0,3);
+            DriveLeft(0,4);
         }
 
         //減速
         if(speed.x < 0) {
-            DriveRight(0,3);
+            DriveRight(0,4);
         }
     }
 
