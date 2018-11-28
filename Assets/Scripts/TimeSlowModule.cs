@@ -50,5 +50,6 @@ public class TimeSlowModule : MonoBehaviour {
     private IEnumerator SlowWait () {
         yield return new WaitForSecondsRealtime(Constant.SLOW_TIME_LENGTH);
         slowFlag = false;
+        coroutine = null;
     }
 }

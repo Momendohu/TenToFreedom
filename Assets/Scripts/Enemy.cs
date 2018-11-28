@@ -75,7 +75,6 @@ public class Enemy : MonoBehaviour {
 
         float time = 0;
         while(time < 1) {
-            Debug.Log(time);
             time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
             spriteRenderer.color = new Color(1,1,1,1 - time);
             transform.localScale += Time.fixedDeltaTime * Vector3.one * size * tsm.GetTimeScale();
@@ -83,8 +82,7 @@ public class Enemy : MonoBehaviour {
             yield return null;
         }
 
-        //Destroy(this.gameObject);
-        yield return null;
+        Destroy(this.gameObject);
     }
 
     //=============================================================
