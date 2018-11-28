@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
+using UnityEngine.UI;
 
 public class TimeSlowModule : MonoBehaviour {
     //=============================================================
     private Coroutine coroutine;
+
+    private Image slowMask;
 
     private bool slowFlag; //スロー処理フラグ
     public bool SlowFlag {
@@ -14,12 +16,24 @@ public class TimeSlowModule : MonoBehaviour {
     }
 
     //=============================================================
+    private void Awake () {
+        slowMask = GameObject.Find("Canvas/SlowMask").GetComponent<Image>();
+        slowMask.enabled = false;
+    }
+
     private void Update () {
         Time.timeScale = GetTimeScale();
 
         //スロー処理
         if(slowFlag && coroutine == null) {
             coroutine = StartCoroutine(SlowWait());
+        }
+
+        //スローマスク表示処理
+        if(slowFlag) {
+            slowMask.enabled = true;
+        } else {
+            slowMask.enabled = false;
         }
     }
 
