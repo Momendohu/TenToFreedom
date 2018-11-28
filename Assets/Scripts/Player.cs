@@ -15,19 +15,19 @@ public class Player : MonoBehaviour {
 
     private Vector3 speed = Vector3.zero; //移動スピード(ジャンプ含む)
 
-    private float maxSpeedX = 0.2f; //最大横速度
+    private float maxSpeedX = 0.4f; //最大横速度
     private Vector3 acc = new Vector3(1,0,0); //加速度
     private float maxJumpPower = 1; //最大ジャンプ速度
     private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
 
     private float attackSpeedRate = 5; //横攻撃時の速度補正
-    private float tackleWaitTime = 0.2f; //タックルの待機時間
+    private float tackleWaitTime = 0.08f; //タックルの待機時間
 
     private Vector3 eyePos = new Vector3(0.384f,0.29f,-5); //目の位置
     private float blinkProb = 2; //瞬きする確率
     private float blinkSpeed = 5; //瞬きのスピード
 
-    private Vector3 blowUpPower = Vector3.up / 5; //吹っ飛ばし力
+    private Vector3 blowUpPower = Vector3.up / 4; //吹っ飛ばし力
 
 
     //アクションタイプ
@@ -192,24 +192,22 @@ public class Player : MonoBehaviour {
 
         //右
         if(r) {
-            DriveRight(maxSpeedX,4);
-            return;
+            DriveRight(maxSpeedX,6);
+        } else {
+            //減速
+            if(speed.x > 0) {
+                DriveLeft(0,6);
+            }
         }
 
         //左
         if(l) {
-            DriveLeft(-maxSpeedX,4);
-            return;
-        }
-
-        //減速
-        if(speed.x > 0) {
-            DriveLeft(0,4);
-        }
-
-        //減速
-        if(speed.x < 0) {
-            DriveRight(0,4);
+            DriveLeft(-maxSpeedX,6);
+        } else {
+            //減速
+            if(speed.x < 0) {
+                DriveRight(0,6);
+            }
         }
     }
 
@@ -274,7 +272,7 @@ public class Player : MonoBehaviour {
         if(collision.gameObject.tag == "Enemy") {
             soundManager.TriggerSE("SE003");
 
-            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,2,1);
+            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,3,1);
 
         }
     }
