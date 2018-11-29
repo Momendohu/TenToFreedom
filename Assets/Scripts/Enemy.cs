@@ -15,6 +15,9 @@ public class Enemy : MonoBehaviour {
 
     private Vector3 damageTextForwardPos = Vector3.forward * 5; //ダメージ表示を手前に描画するための数値
 
+    private bool damageWaitFlag; //ダメージ時待機フラグ
+    private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
+
     /// <summary>
     /// ステータス
     /// </summary>
@@ -51,6 +54,28 @@ public class Enemy : MonoBehaviour {
 
     private void Update () {
         hpGauge.value = state.Hp / state.MaxHp;
+
+        if(damageWaitFlag && damageWaitCoroutine == null) {
+            damageWaitCoroutine = StartCoroutine(DamageWait(1));
+        }
+    }
+
+    //=============================================================
+    /// <summary>
+    /// ダメージ時の待機処理
+    /// </summary>
+    /// <param name="time">待機時間</param>
+    /// <returns></returns>
+    private IEnumerator DamageWait (float time) {
+        float _time = 0;
+        while(_time < time) {
+            _time += Time.fixedDeltaTime * tsm.GetTimeScale();
+
+            yield return null;
+        }
+
+        damageWaitFlag = false;
+        damageWaitCoroutine = null;
     }
 
     //=============================================================
@@ -93,15 +118,17 @@ public class Enemy : MonoBehaviour {
     /// <param name="power">吹っ飛ぶ力</param>
     /// <param name="damage">与えるダメージ</param>
     public void Collide (Vector2 vec,float power,float damage) {
-        _rigidbody2D.velocity += vec.normalized * power; //速度加算
-        state.Hp -= damage; //ダメージを与える
-        CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
+        if(!damageWaitFlag) {
+            damageWaitFlag = true;
+            _rigidbody2D.velocity += vec.normalized * power; //速度加算
+            state.Hp -= damage; //ダメージを与える
+            CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
 
-        //Debug.Log(state.Hp);
-        //hpが0になったら
-        if(state.Hp <= 0) {
-            tsm.SlowFlag = true; //スロー処理発動
-            StartCoroutine(DestroyAnim(1,5));
+            //hpが0になったら
+            if(state.Hp <= 0) {
+                tsm.SlowFlag = true; //スロー処理発動
+                StartCoroutine(DestroyAnim(1,5));
+            }
         }
     }
 
