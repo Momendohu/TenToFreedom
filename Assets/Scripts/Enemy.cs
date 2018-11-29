@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour {
 
     private bool damageWaitFlag; //ダメージ時待機フラグ
     private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
+    private float damageWaitTime = 0.2f; //ダメージ待機時間
 
     /// <summary>
     /// ステータス
@@ -56,7 +57,7 @@ public class Enemy : MonoBehaviour {
         hpGauge.value = state.Hp / state.MaxHp;
 
         if(damageWaitFlag && damageWaitCoroutine == null) {
-            damageWaitCoroutine = StartCoroutine(DamageWait(1));
+            damageWaitCoroutine = StartCoroutine(DamageWait(damageWaitTime));
         }
     }
 
@@ -127,7 +128,7 @@ public class Enemy : MonoBehaviour {
             //hpが0になったら
             if(state.Hp <= 0) {
                 tsm.SlowFlag = true; //スロー処理発動
-                StartCoroutine(DestroyAnim(1,5));
+                StartCoroutine(DestroyAnim(10,5));
             }
         }
     }

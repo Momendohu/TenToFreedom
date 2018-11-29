@@ -20,8 +20,8 @@ public class Player : MonoBehaviour {
     private float maxJumpPower = 1; //最大ジャンプ速度
     private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
 
-    private float attackSpeedRate = 5; //横攻撃時の速度補正
-    private float tackleWaitTime = 0.08f; //タックルの待機時間
+    private float attackSpeedRate = 3; //横攻撃時の速度補正
+    private float tackleWaitTime = 0.1f; //タックルの待機時間
 
     private Vector3 eyePos = new Vector3(0.384f,0.29f,-5); //目の位置
     private float blinkProb = 2; //瞬きする確率
@@ -187,6 +187,15 @@ public class Player : MonoBehaviour {
 
         //両方押し
         if(r && l) {
+            //減速
+            if(speed.x > 0) {
+                DriveLeft(0,6);
+            }
+
+            //減速
+            if(speed.x < 0) {
+                DriveRight(0,6);
+            }
             return;
         }
 
@@ -272,7 +281,7 @@ public class Player : MonoBehaviour {
         if(collision.gameObject.tag == "Enemy") {
             soundManager.TriggerSE("SE003");
 
-            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,3,1);
+            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,1);
         }
     }
 }
