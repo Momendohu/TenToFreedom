@@ -8,6 +8,7 @@ public class CanvasManager : MonoBehaviour {
     private Player player;
     private GameObject jiyuu;
     private Image jiyuuSkillGauge;
+    private Text yuPointText;
 
     //=============================================================
     private void Init () {
@@ -19,6 +20,7 @@ public class CanvasManager : MonoBehaviour {
         player = GameObject.Find("Player").GetComponent<Player>();
         jiyuu = transform.Find("Jiyuu").gameObject;
         jiyuuSkillGauge = transform.Find("Jiyuu/SkillGauge").GetComponent<Image>();
+        yuPointText = transform.Find("Jiyuu/Image/Text").GetComponent<Text>();
     }
 
     //=============================================================
@@ -32,6 +34,14 @@ public class CanvasManager : MonoBehaviour {
 
     private void Update () {
 
+    }
+
+    //=============================================================
+    /// <summary>
+    /// 「ゆ」ポイントを表示に適用する
+    /// </summary>
+    public void ApplyYuPointText (int num) {
+        yuPointText.text = "YP:" + num;
     }
 
     //=============================================================

@@ -11,7 +11,17 @@ public class GameManager : MonoBehaviour {
         public float YuPoint;
     }
 
-    public Parameter paramater = new Parameter {
+    public Parameter parameter = new Parameter {
         YuPoint = 0,
     };
+
+    private CanvasManager canvasManager;
+
+    private void Awake () {
+        canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
+    }
+
+    private void Update () {
+        canvasManager.ApplyYuPointText((int)parameter.YuPoint);
+    }
 }
