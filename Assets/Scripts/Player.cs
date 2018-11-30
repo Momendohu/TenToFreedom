@@ -29,12 +29,19 @@ public class Player : MonoBehaviour {
 
     private Vector3 blowUpPower = Vector3.up / 3; //吹っ飛ばし力
 
+    private float actionWaitTimeLength = 2; //アクション発動後の待機時間
+    private float actionWaitTime = 1; //アクション発動後の待機時間
+    public float ActionWaitTime {
+        get { return actionWaitTime; }
+        set { actionWaitTime = value; }
+    }
 
     //アクションタイプ
     private enum ActionType {
         Normal = 0,
-        TackleR = 1,
-        TackleL = 2,
+        Wait = 1,
+        TackleR = 2,
+        TackleL = 3,
     }
     private ActionType actionType = ActionType.Normal;
 
@@ -65,6 +72,13 @@ public class Player : MonoBehaviour {
             _rigidbody2D.gravityScale = 2;
 
             Tackle(tackleWaitTime);
+            Jump();
+            Move();
+            break;
+
+            case ActionType.Wait:
+            _rigidbody2D.gravityScale = 2;
+
             Jump();
             Move();
             break;
@@ -136,12 +150,31 @@ public class Player : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator ActionWait (float time) {
         float _time = 0;
-        while(_time < time) {
-            _time += Time.fixedDeltaTime * tsm.GetTimeScale();
+        while(_time < 1) {
+            _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
 
             yield return null;
         }
 
+        StartCoroutine(ActionWaitBefore(actionWaitTimeLength));
+        actionType = ActionType.Wait;
+    }
+
+    //=============================================================
+    /// <summary>
+    /// アクション発動後の待機処理
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    private IEnumerator ActionWaitBefore (float time) {
+        actionWaitTime = 0;
+        while(actionWaitTime < 1) {
+            actionWaitTime += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
+
+            yield return null;
+        }
+
+        actionWaitTime = 1;
         actionType = ActionType.Normal;
     }
 
