@@ -283,6 +283,7 @@ public class Player : MonoBehaviour {
         }
 
         if(collision.gameObject.tag=="Yu") {
+            soundManager.TriggerSE("SE004");
             Destroy(collision.gameObject);
         }
     }
