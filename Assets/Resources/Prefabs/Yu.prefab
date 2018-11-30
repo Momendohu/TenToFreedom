@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 102914575967197976}
   - component: {fileID: 50616125448748936}
   - component: {fileID: 61335024929304444}
+  - component: {fileID: 114914744831654930}
   m_Layer: 0
   m_Name: Yu
   m_TagString: Yu
@@ -199,3 +200,14 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
+--- !u!114 &114914744831654930
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866837316636202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3b6cc4a50025a84894582b87c9c4fd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -8,13 +8,14 @@ public class GameManager : MonoBehaviour {
     /// パラメーター(大域的な)
     /// </summary>
     public struct Parameter {
-        public float YuPoint;
+        public int YuPoint;
     }
 
     public Parameter parameter = new Parameter {
         YuPoint = 0,
     };
 
+    //=============================================================
     private CanvasManager canvasManager;
 
     private void Awake () {
@@ -22,6 +23,15 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update () {
-        canvasManager.ApplyYuPointText((int)parameter.YuPoint);
+        canvasManager.ApplyYuPointText(parameter.YuPoint);
+    }
+
+    //=============================================================
+    /// <summary>
+    /// 「ゆ」ポイントに加算する
+    /// </summary>
+    /// <param name="num"></param>
+    public void AddYuPoint (int num) {
+        parameter.YuPoint += num;
     }
 }
