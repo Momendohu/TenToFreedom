@@ -34,17 +34,25 @@ public class FieldManager : MonoBehaviour {
     private void CreateField () {
         for(int i = 0;i < 4;i++) {
             CreateBlock(new Vector3(blockSize * (-1),blockSize * (i - 1),0) + fieldBasePosition,"ReflectionWall");
-            CreateBlock(new Vector3(blockSize * (150 - 1),blockSize * (i - 1),0) + fieldBasePosition,"ReflectionWall");
+            CreateBlock(new Vector3(blockSize * (120 - 1),blockSize * (i - 1),0) + fieldBasePosition,"ReflectionWall");
         }
 
-        for(int i = 0;i < 150;i++) {
+        for(int i = 0;i < 20;i++) {
+            CreateBlock(new Vector3(i * blockSize,blockSize * 2,0) + fieldBasePosition,"ReflectionWall");
+            CreateBlock(new Vector3(i * blockSize,blockSize * 1,0) + fieldBasePosition,"ReflectionWall");
+            CreateBlock(new Vector3(i * blockSize,blockSize * 0.5f,0) + fieldBasePosition,"ReflectionWall");
+            CreateBlock(new Vector3(i * blockSize,-blockSize,0) + fieldBasePosition);
+        }
+
+        for(int i = 20;i < 120;i++) {
             CreateBlock(new Vector3(i * blockSize,blockSize * 2,0) + fieldBasePosition,"ReflectionWall");
             CreateBlock(new Vector3(i * blockSize,-blockSize,0) + fieldBasePosition);
         }
 
+        /*
         for(int i = 0;i < 100;i++) {
             CreateEnemy(new Vector3(0,0,0) + fieldBasePosition);
-        }
+        }*/
     }
 
     //=============================================================

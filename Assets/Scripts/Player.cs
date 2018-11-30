@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
     private Vector3 speed = Vector3.zero; //移動スピード(ジャンプ含む)
 
     private float maxSpeedX = 0.3f; //最大横速度
-    private Vector3 acc = new Vector3(1,0,0); //加速度
+    private Vector3 acc = new Vector3(0.2f,0,0); //加速度
     private float maxJumpPower = 1; //最大ジャンプ速度
     private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
 
@@ -25,8 +25,6 @@ public class Player : MonoBehaviour {
     private float tackleWaitTime = 0.3f; //タックルの待機時間
 
     private Vector3 eyePos = new Vector3(0.384f,0.29f,-5); //目の位置
-    private float blinkProb = 2; //瞬きする確率
-    private float blinkSpeed = 5; //瞬きのスピード
 
     private Vector3 blowUpPower = Vector3.up / 3; //吹っ飛ばし力
 
@@ -118,28 +116,6 @@ public class Player : MonoBehaviour {
         if(speed.x < 0) {
             eye.transform.localPosition = new Vector3(-eyePos.x,eyePos.y,eyePos.z);
         }
-
-        //瞬き判定
-        if(Random.Range(0,100) >= (100 - blinkProb)) {
-            StartCoroutine(Blink(blinkSpeed));
-        }
-    }
-
-    //=============================================================
-    /// <summary>
-    /// 瞬き
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator Blink (float speed) {
-        float time = 0;
-        while(time < 1) {
-            time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
-            eye.transform.localScale = new Vector3(1,1 - Mathf.Sin(Mathf.Deg2Rad * 180 * time),1);
-
-            yield return null;
-        }
-
-        yield break;
     }
 
     //=============================================================
@@ -227,12 +203,12 @@ public class Player : MonoBehaviour {
         if(r && l) {
             //減速
             if(speed.x > 0) {
-                DriveLeft(0,6);
+                DriveLeft(0,18);
             }
 
             //減速
             if(speed.x < 0) {
-                DriveRight(0,6);
+                DriveRight(0,18);
             }
             return;
         }
@@ -243,7 +219,7 @@ public class Player : MonoBehaviour {
         } else {
             //減速
             if(speed.x > 0) {
-                DriveLeft(0,6);
+                DriveLeft(0,18);
             }
         }
 
@@ -253,7 +229,7 @@ public class Player : MonoBehaviour {
         } else {
             //減速
             if(speed.x < 0) {
-                DriveRight(0,6);
+                DriveRight(0,18);
             }
         }
     }
