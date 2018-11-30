@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour {
     private Slider hpGauge;
 
     private Vector3 damageTextForwardPos = Vector3.forward * 5; //ダメージ表示を手前に描画するための数値
+    private Vector2 yuInitSpeed = new Vector2(0,3); //「ゆ」生成時の最初のスピード
 
     private bool damageWaitFlag; //ダメージ時待機フラグ
     private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
@@ -110,6 +111,7 @@ public class Enemy : MonoBehaviour {
             yield return null;
         }
 
+        CreateYu(transform.position,yuInitSpeed);
         Destroy(this.gameObject);
     }
 
@@ -124,16 +126,17 @@ public class Enemy : MonoBehaviour {
         if(!damageWaitFlag) {
             damageWaitFlag = true;
 
-            soundManager.TriggerSE("SE003");
-
             _rigidbody2D.velocity += vec.normalized * power; //速度加算
             state.Hp -= damage; //ダメージを与える
             CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
 
             //hpが0になったら
             if(state.Hp <= 0) {
-                tsm.SlowFlag = true; //スロー処理発動
+                tsm.SlowFlag = true; //スロー処理
+                soundManager.TriggerSE("SE003");
                 StartCoroutine(DestroyAnim(10,5));
+            } else {
+                soundManager.TriggerSE("SE005");
             }
         }
     }
@@ -142,5 +145,12 @@ public class Enemy : MonoBehaviour {
     private void CreateDamageText (Vector3 pos) {
         GameObject obj = Instantiate(Resources.Load("Prefabs/DamageText")) as GameObject;
         obj.transform.position = pos;
+    }
+
+    //=============================================================
+    private void CreateYu (Vector3 pos,Vector2 speed) {
+        GameObject obj = Instantiate(Resources.Load("Prefabs/Yu")) as GameObject;
+        obj.transform.position = pos;
+        obj.GetComponent<Rigidbody2D>().velocity += speed;
     }
 }
