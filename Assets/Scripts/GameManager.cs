@@ -17,9 +17,15 @@ public class GameManager : MonoBehaviour {
 
     //=============================================================
     private CanvasManager canvasManager;
+    private SoundManager soundManager;
 
     private void Awake () {
         canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+    }
+
+    private void Start () {
+        soundManager.TriggerBGM("BGM001",true);
     }
 
     private void Update () {

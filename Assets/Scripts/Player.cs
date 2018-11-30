@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
 
     private Vector3 speed = Vector3.zero; //移動スピード(ジャンプ含む)
 
-    private float maxSpeedX = 0.4f; //最大横速度
+    private float maxSpeedX = 0.3f; //最大横速度
     private Vector3 acc = new Vector3(1,0,0); //加速度
     private float maxJumpPower = 1; //最大ジャンプ速度
     private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
@@ -312,7 +312,7 @@ public class Player : MonoBehaviour {
 
     //=============================================================
     /// <summary>
-    /// 衝突判定
+    /// 衝突判定(トリガー)
     /// </summary>
     /// <param name="collision"></param>
     private void OnTriggerEnter2D (Collider2D collision) {
@@ -328,6 +328,17 @@ public class Player : MonoBehaviour {
         if(collision.gameObject.tag == "Yu") {
             soundManager.TriggerSE("SE004");
             Destroy(collision.gameObject);
+        }   
+    }
+
+    //=============================================================
+    /// <summary>
+    /// 衝突判定
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionStay2D (Collision2D collision) {
+        if(collision.gameObject.tag == "ReflectionWall") {
+            transform.position += speed * (-1);
         }
     }
 
