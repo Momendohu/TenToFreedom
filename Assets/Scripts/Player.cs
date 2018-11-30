@@ -22,7 +22,7 @@ public class Player : MonoBehaviour {
     private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
 
     private float attackSpeedRate = 3; //横攻撃時の速度補正
-    private float tackleWaitTime = 0.2f; //タックルの待機時間
+    private float tackleWaitTime = 0.3f; //タックルの待機時間
 
     private Vector3 eyePos = new Vector3(0.384f,0.29f,-5); //目の位置
     private float blinkProb = 2; //瞬きする確率
@@ -147,8 +147,9 @@ public class Player : MonoBehaviour {
     /// アクション発動時の待機処理
     /// </summary>
     /// <param name="time"></param>
+    /// <param name="effectObj"></param>
     /// <returns></returns>
-    private IEnumerator ActionWait (float time) {
+    private IEnumerator ActionWait (float time,GameObject effectObj) {
         StartCoroutine(canvasManager.JiyuuUIAnim1(0.3f,0.5f));
 
         float _time = 0;
@@ -157,6 +158,8 @@ public class Player : MonoBehaviour {
 
             yield return null;
         }
+
+        Destroy(effectObj);
 
         StartCoroutine(ActionWaitBefore(actionWaitTimeLength));
         actionType = ActionType.Wait;
@@ -187,14 +190,14 @@ public class Player : MonoBehaviour {
     private void Tackle (float waitTime) {
         if(InputController.IsPushButtonDown(KeyCode.Space)) {
             if(speed.x > 0) {
+                StartCoroutine(ActionWait(waitTime,CreateTakcleEffect()));
                 soundManager.TriggerSE("SE001");
                 actionType = ActionType.TackleR;
             } else if(speed.x < 0) {
+                StartCoroutine(ActionWait(waitTime,CreateTakcleEffect()));
                 soundManager.TriggerSE("SE001");
                 actionType = ActionType.TackleL;
             }
-
-            StartCoroutine(ActionWait(waitTime));
         }
     }
 
@@ -315,7 +318,7 @@ public class Player : MonoBehaviour {
     private void OnTriggerEnter2D (Collider2D collision) {
         if(collision.gameObject.tag == "Enemy") {
             //通常アクションタイプでないなら
-            if(!(actionType == ActionType.Normal)) {
+            if(!(actionType == ActionType.Normal || actionType == ActionType.Wait)) {
                 collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,16,10);
             } else {
                 collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,0);
@@ -326,5 +329,18 @@ public class Player : MonoBehaviour {
             soundManager.TriggerSE("SE004");
             Destroy(collision.gameObject);
         }
+    }
+
+    //=============================================================
+    /// <summary>
+    /// エフェクトの生成
+    /// </summary>
+    /// <returns></returns>
+    private GameObject CreateTakcleEffect () {
+        GameObject obj = Instantiate(Resources.Load("Prefabs/Effect/Tackle")) as GameObject;
+        obj.transform.position = transform.position + new Vector3(0,0,-50);
+        obj.transform.SetParent(transform);
+
+        return obj;
     }
 }
