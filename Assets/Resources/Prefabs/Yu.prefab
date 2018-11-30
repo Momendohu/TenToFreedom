@@ -151,7 +151,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7, y: 0.7}
+  m_Size: {x: 1.8, y: 1.8}
   m_EdgeRadius: 0
 --- !u!61 &61335024929304444
 BoxCollider2D:
@@ -176,7 +176,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!102 &102914575967197976
 TextMesh:
@@ -187,7 +187,7 @@ TextMesh:
   m_GameObject: {fileID: 1866837316636202}
   m_Text: "\u3086"
   m_OffsetZ: 0
-  m_CharacterSize: 0.02
+  m_CharacterSize: 0.06
   m_LineSpacing: 1
   m_Anchor: 4
   m_Alignment: 1

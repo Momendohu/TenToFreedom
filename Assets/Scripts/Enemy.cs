@@ -15,7 +15,8 @@ public class Enemy : MonoBehaviour {
     private Slider hpGauge;
 
     private Vector3 damageTextForwardPos = Vector3.forward * 5; //ダメージ表示を手前に描画するための数値
-    private Vector2 yuInitSpeed = new Vector2(0,3); //「ゆ」生成時の最初のスピード
+    private Vector2 yuInitSpeed = new Vector2(0,10); //「ゆ」生成時の最初のスピード
+    private float yuInitSpeedRandomRangeY = 5;
 
     private bool damageWaitFlag; //ダメージ時待機フラグ
     private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
@@ -111,7 +112,7 @@ public class Enemy : MonoBehaviour {
             yield return null;
         }
 
-        CreateYu(transform.position,yuInitSpeed);
+        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(0,yuInitSpeedRandomRangeY),0));
         Destroy(this.gameObject);
     }
 
@@ -136,7 +137,11 @@ public class Enemy : MonoBehaviour {
                 soundManager.TriggerSE("SE003");
                 StartCoroutine(DestroyAnim(10,5));
             } else {
-                soundManager.TriggerSE("SE005");
+                if(damage == 0) {
+                    soundManager.TriggerSE("SE006");
+                } else {
+                    soundManager.TriggerSE("SE005");
+                }
             }
         }
     }
