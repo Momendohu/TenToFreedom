@@ -21,13 +21,13 @@ public class Player : MonoBehaviour {
     private Vector3 jumpPower = new Vector3(0,10,0); //ジャンプ力
 
     private float attackSpeedRate = 3; //横攻撃時の速度補正
-    private float tackleWaitTime = 0.1f; //タックルの待機時間
+    private float tackleWaitTime = 0.2f; //タックルの待機時間
 
     private Vector3 eyePos = new Vector3(0.384f,0.29f,-5); //目の位置
     private float blinkProb = 2; //瞬きする確率
     private float blinkSpeed = 5; //瞬きのスピード
 
-    private Vector3 blowUpPower = Vector3.up / 4; //吹っ飛ばし力
+    private Vector3 blowUpPower = Vector3.up / 3; //吹っ飛ばし力
 
 
     //アクションタイプ
@@ -279,7 +279,12 @@ public class Player : MonoBehaviour {
     /// <param name="collision"></param>
     private void OnTriggerEnter2D (Collider2D collision) {
         if(collision.gameObject.tag == "Enemy") {
-            collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,1);
+            //通常アクションタイプでないなら
+            if(!(actionType==ActionType.Normal)) {
+                collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,1);
+            } else {
+                collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,0);
+            }
         }
 
         if(collision.gameObject.tag=="Yu") {

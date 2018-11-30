@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour {
 
             _rigidbody2D.velocity += vec.normalized * power; //速度加算
             state.Hp -= damage; //ダメージを与える
-            CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
+            CreateDamageText(transform.position + damageTextForwardPos,(int)damage); //ダメージ表示
 
             //hpが0になったら
             if(state.Hp <= 0) {
@@ -142,9 +142,10 @@ public class Enemy : MonoBehaviour {
     }
 
     //=============================================================
-    private void CreateDamageText (Vector3 pos) {
+    private void CreateDamageText (Vector3 pos,int damage) {
         GameObject obj = Instantiate(Resources.Load("Prefabs/DamageText")) as GameObject;
         obj.transform.position = pos;
+        obj.GetComponent<TextMesh>().text = "" + damage;
     }
 
     //=============================================================
