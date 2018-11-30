@@ -1622,7 +1622,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.7, y: 0.7}
   m_EdgeRadius: 0
 --- !u!1 &605053793
 GameObject:
@@ -4481,7 +4481,7 @@ GameObject:
   - component: {fileID: 1715060510}
   m_Layer: 0
   m_Name: Yu
-  m_TagString: Untagged
+  m_TagString: Yu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4515,7 +4515,7 @@ TextMesh:
   m_GameObject: {fileID: 1715060505}
   m_Text: "\u3086"
   m_OffsetZ: 0
-  m_CharacterSize: 0.03
+  m_CharacterSize: 0.02
   m_LineSpacing: 1
   m_Anchor: 4
   m_Alignment: 1
@@ -4599,7 +4599,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1.2}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
 --- !u!1 &1715836569
 GameObject:

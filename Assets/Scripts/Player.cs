@@ -279,9 +279,11 @@ public class Player : MonoBehaviour {
     /// <param name="collision"></param>
     private void OnTriggerEnter2D (Collider2D collision) {
         if(collision.gameObject.tag == "Enemy") {
-            soundManager.TriggerSE("SE003");
-
             collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,1);
+        }
+
+        if(collision.gameObject.tag=="Yu") {
+            Destroy(collision.gameObject);
         }
     }
 }

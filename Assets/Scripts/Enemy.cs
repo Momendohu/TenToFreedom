@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour {
     //=============================================================
     private TimeSlowModule tsm;
+    private SoundManager soundManager;
 
     private BoxCollider2D col;
     private BoxCollider2D colTrigger;
@@ -40,6 +41,7 @@ public class Enemy : MonoBehaviour {
     //=============================================================
     private void CRef () {
         tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 
         col = transform.Find("ColliderBody").GetComponent<BoxCollider2D>();
         colTrigger = GetComponent<BoxCollider2D>();
@@ -121,6 +123,9 @@ public class Enemy : MonoBehaviour {
     public void Collide (Vector2 vec,float power,float damage) {
         if(!damageWaitFlag) {
             damageWaitFlag = true;
+
+            soundManager.TriggerSE("SE003");
+
             _rigidbody2D.velocity += vec.normalized * power; //速度加算
             state.Hp -= damage; //ダメージを与える
             CreateDamageText(transform.position + damageTextForwardPos); //ダメージ表示
