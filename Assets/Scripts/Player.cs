@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour {
     //=============================================================
     private TimeSlowModule tsm;
+    private CanvasManager canvasManager;
 
     private Rigidbody2D _rigidbody2D;
     private GameObject eye;
@@ -31,10 +32,6 @@ public class Player : MonoBehaviour {
 
     private float actionWaitTimeLength = 2; //アクション発動後の待機時間
     private float actionWaitTime = 1; //アクション発動後の待機時間
-    public float ActionWaitTime {
-        get { return actionWaitTime; }
-        set { actionWaitTime = value; }
-    }
 
     //アクションタイプ
     private enum ActionType {
@@ -53,6 +50,7 @@ public class Player : MonoBehaviour {
     //=============================================================
     private void CRef () {
         tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
+        canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
 
         _rigidbody2D = this.GetComponent<Rigidbody2D>();
         eye = transform.Find("Eye").gameObject;
@@ -65,6 +63,8 @@ public class Player : MonoBehaviour {
     }
 
     private void Update () {
+        canvasManager.ApplySkillGauge(actionWaitTime);
+
         EyeMove();
 
         switch(actionType) {
@@ -149,6 +149,8 @@ public class Player : MonoBehaviour {
     /// <param name="time"></param>
     /// <returns></returns>
     private IEnumerator ActionWait (float time) {
+        StartCoroutine(canvasManager.JiyuuUIAnim1(0.3f,0.5f));
+
         float _time = 0;
         while(_time < 1) {
             _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;

@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour {
         colTrigger = GetComponent<BoxCollider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = transform.Find("Image").GetComponent<SpriteRenderer>();
-        hpGauge = transform.Find("Canvas/HpGauge").GetComponent<Slider>();
+        hpGauge = transform.Find("c/HpGauge").GetComponent<Slider>();
     }
 
     //=============================================================

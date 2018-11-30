@@ -1986,7 +1986,7 @@ GameObject:
   - component: {fileID: 625318376}
   - component: {fileID: 625318375}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2914,7 +2914,7 @@ GameObject:
   - component: {fileID: 871367946}
   - component: {fileID: 871367945}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4002,7 +4002,7 @@ GameObject:
   - component: {fileID: 1336666008}
   - component: {fileID: 1336666007}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4360,7 +4360,7 @@ GameObject:
   - component: {fileID: 1540311438}
   - component: {fileID: 1540311437}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
