@@ -112,7 +112,7 @@ public class Enemy : MonoBehaviour {
             yield return null;
         }
 
-        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(0,yuInitSpeedRandomRangeY),0));
+        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
         Destroy(this.gameObject);
     }
 
