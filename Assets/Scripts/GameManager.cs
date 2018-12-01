@@ -15,21 +15,86 @@ public class GameManager : MonoBehaviour {
         YuPoint = 1,
     };
 
+    //ボス出現フラグ
+    private bool bossAppearFlag;
+    public bool BossAppearFlag {
+        get { return bossAppearFlag; }
+        set { bossAppearFlag = value; }
+    }
+
+    //ボス撃破フラグ
+    private bool bossDefeatFlag;
+    public bool BossDefeatFlag {
+        get { return bossDefeatFlag; }
+        set { bossDefeatFlag = value; }
+    }
+
+    private bool bossAppearOnce;
+    private bool bossDefeatOnce;
+
     //=============================================================
     private CanvasManager canvasManager;
     private SoundManager soundManager;
+    private GameObject superOri1; //ボス用オリの管理のため
+    private GameObject superOri2; //ボス用オリの管理のため
 
     private void Awake () {
         canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        superOri1 = GameObject.Find("Field/Object/SuperOris/SuperOri1");
+        superOri2 = GameObject.Find("Field/Object/SuperOris/SuperOri2");
     }
 
     private void Start () {
         soundManager.TriggerBGM("BGM001",true);
+        superOri1.SetActive(false);
     }
 
     private void Update () {
         canvasManager.ApplyYuPointText(parameter.YuPoint);
+
+        //ボスフラグ発生時一回だけ処理
+        if(bossAppearFlag) {
+            if(!bossAppearOnce) {
+                StartCoroutine(BossAppearPerform());
+                bossAppearOnce = true;
+            }
+        }
+
+        //ボスフラグ発生時一回だけ処理
+        if(bossDefeatFlag) {
+            if(!bossDefeatOnce) {
+                StartCoroutine(BossDefeatPerform());
+                superOri1.SetActive(false);
+                superOri2.SetActive(false);
+                bossDefeatOnce = true;
+            }
+        }
+    }
+
+    //=============================================================
+    private IEnumerator BossAppearPerform () {
+        CreateBoss(new Vector3(531.4f,9,0));
+        superOri1.SetActive(true);
+        soundManager.TriggerSE("SE012");
+
+        yield return null;
+    }
+
+    //=============================================================
+    private IEnumerator BossDefeatPerform () {
+        soundManager.TriggerSE("SE012");
+
+        yield return null;
+    }
+
+    //=============================================================
+    /// <summary>
+    /// ボスの作成
+    /// </summary>
+    private void CreateBoss (Vector3 pos) {
+        GameObject obj = Instantiate(Resources.Load("Prefabs/Enemy"),pos,Quaternion.identity) as GameObject;
+        obj.GetComponent<Enemy>().Id = 5;
     }
 
     //=============================================================

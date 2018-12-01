@@ -204,7 +204,7 @@ public class Enemy : MonoBehaviour {
         _rigidbody2D.velocity = Vector3.zero;
         _rigidbody2D.gravityScale = 0;
 
-
+        //消える演出
         float time = 0;
         while(time < 1) {
             time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
@@ -214,8 +214,20 @@ public class Enemy : MonoBehaviour {
             yield return null;
         }
 
+        //「ゆ」を生成
         for(int i = 0;i < state[Id].HoldYu;i++) {
             CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
+        }
+
+        //ギュウニュウならボスフラグを立てる
+        if(state[Id].Name == "ギュウニュウ") {
+            soundManager.TriggerSE("SE008");
+            gameManager.BossAppearFlag = true;
+        }
+
+        //ニュウギュウならボス撃破を立てる
+        if(state[Id].Name == "ニュウギュウ") {
+            gameManager.BossDefeatFlag = true;
         }
 
         Destroy(this.gameObject);
