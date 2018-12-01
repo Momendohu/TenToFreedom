@@ -304,8 +304,8 @@ public class Enemy : MonoBehaviour {
     private void GenerateObj () {
         switch(state[Id].Name) {
             case "シアワセノネコ":
-            //ジュースを20こ生成
-            for(int i = 0;i < 20;i++) {
+            //ジュースを30こ生成
+            for(int i = 0;i < 30;i++) {
                 CreateEnemy(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0),0);
             }
             break;

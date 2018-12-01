@@ -34,7 +34,7 @@ public class FieldManager : MonoBehaviour {
     private void CreateField () {
         for(int i = 0;i < 4;i++) {
             CreateBlock(new Vector3(blockSize * (-1),blockSize * (i - 1),0) + fieldBasePosition,"ReflectionWall");
-            CreateBlock(new Vector3(blockSize * (100 - 1),blockSize * (i - 1),0) + fieldBasePosition,"ReflectionWall");
+            CreateBlock(new Vector3(blockSize * (60 - 1),blockSize * (i - 1),0) + fieldBasePosition,"ReflectionWall");
         }
 
         for(int i = 0;i < 15;i++) {
@@ -44,8 +44,11 @@ public class FieldManager : MonoBehaviour {
             CreateBlock(new Vector3(i * blockSize,-blockSize,0) + fieldBasePosition);
         }
 
-        for(int i = 15;i < 100;i++) {
-            CreateBlock(new Vector3(i * blockSize,blockSize * 2,0) + fieldBasePosition,"ReflectionWall");
+        for(int i = 15;i < 60;i++) {
+            if(i!=18) {
+                CreateBlock(new Vector3(i * blockSize,blockSize * 2,0) + fieldBasePosition,"ReflectionWall");
+            }
+            
             CreateBlock(new Vector3(i * blockSize,-blockSize,0) + fieldBasePosition);
         }
 
