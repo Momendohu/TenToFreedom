@@ -33,8 +33,8 @@ public class Player : MonoBehaviour {
 
     private Vector3 blowUpPower = Vector3.up / 3; //吹っ飛ばし力
 
-    private float actionWaitTimeLength = 2; //アクション発動後の待機時間
-    private float actionWaitTime = 1; //アクション発動後の待機時間
+    private float actionWaitTimeLength = 1.5f; //アクション発動後の待機時間
+    private float actionWaitTime = 1; //アクション発動後の待機経過時間(UIに適用するときに主に用いる)
 
     //アクションタイプ
     private enum ActionType {
@@ -68,8 +68,10 @@ public class Player : MonoBehaviour {
     }
 
     private void Update () {
+        //UIに適用
         canvasManager.ApplySkillGauge(actionWaitTime);
 
+        //目の左右動作
         EyeMove();
 
         switch(actionType) {
