@@ -90,6 +90,9 @@ public class Player : MonoBehaviour {
 
             case ActionType.Damage:
             _rigidbody2D.gravityScale = 2;
+
+            Jump();
+            Move();
             break;
 
             case ActionType.TackleR:
@@ -140,7 +143,7 @@ public class Player : MonoBehaviour {
         float _time = 0;
         while(_time < 1) {
             //点滅
-            spriteRenderer.color = new Color(0,0,0,1 - Mathf.Sin(_time * Mathf.Deg2Rad * 180 * 6));
+            spriteRenderer.color = new Color(0,0,0,1 - Mathf.Sin(_time * Mathf.Deg2Rad * 180 * 18));
             _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
 
             yield return null;

@@ -104,5 +104,8 @@ public class GameManager : MonoBehaviour {
     /// <param name="num"></param>
     public void ApplyYuPoint (int num) {
         parameter.YuPoint += num;
+        if(parameter.YuPoint<0) {
+            parameter.YuPoint = 0;
+        }
     }
 }

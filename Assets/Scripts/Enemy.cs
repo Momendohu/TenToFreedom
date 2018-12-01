@@ -256,19 +256,25 @@ public class Enemy : MonoBehaviour {
                     _rigidbody2D.velocity += vec.normalized * power; //速度加算
                 } else {
                     //プレイヤー反射
-                    StartCoroutine(player.GetComponent<Player>().DamageWait(0.3f));
+                    StartCoroutine(player.GetComponent<Player>().DamageWait(1));
                     Vector3 reflectVec = (player.transform.position - transform.position + Vector3.up * 0.5f).normalized / 2f; //少し上に補正
                     reflectVec.y *= 0.5f; //y軸方向の速度を1/2に
                     reflectVec.z = 0;
                     player.GetComponent<Player>().Speed += reflectVec;
 
-                    //「ゆ」を落とす(ダメージの1/2)
-                    for(int i = 0;i < state[Id].ReflectDamage / 2;i++) {
+                    //ダメージを受ける + 「ゆ」を落とす(ダメージの1/2)
+                    int _damage = 0;
+                    if(gameManager.parameter.YuPoint < state[Id].ReflectDamage) {
+                        _damage = gameManager.parameter.YuPoint;
+                    } else {
+                        _damage = state[Id].ReflectDamage;
+                    }
+
+                    gameManager.ApplyYuPoint(-_damage);
+                    for(int i = 0;i < _damage / 2;i++) {
                         CreateYu(player.transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
                     }
                 }
-
-                gameManager.ApplyYuPoint(-state[Id].ReflectDamage);
             }
 
             //hpが0になったら
