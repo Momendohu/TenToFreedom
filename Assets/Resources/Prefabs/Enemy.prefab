@@ -319,7 +319,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 16b85bbdac30d2044992314de4039edf, type: 3}
   - {fileID: 21300000, guid: 7adbafc49365fb34cb7e6c10c1f8c785, type: 3}
   - {fileID: 21300000, guid: a9d7317ee5916b64290c5dd9c258ec94, type: 3}
-  Id: 1
+  - {fileID: 21300000, guid: 217efb1386db71c44ab8b9523dd7ab74, type: 3}
+  - {fileID: 21300000, guid: cd3010877b8df6a48bdf612859b38eb3, type: 3}
+  - {fileID: 21300000, guid: 2ac6048c5928bdb439db0debabbda902, type: 3}
+  Id: 0
 --- !u!114 &114471487239147974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -485,7 +488,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1946409157
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &224021601258413442

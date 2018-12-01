@@ -16,17 +16,28 @@ public class Enemy : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
     private Slider hpGauge;
 
+    private float colliderTriggerSizeRate = 1.2f; //トリガー用当たり判定の大きさ倍率
+
     private Vector3 damageTextForwardPos = Vector3.forward * 5; //ダメージ表示を手前に描画するための数値
     private Vector2 yuInitSpeed = new Vector2(0,10); //「ゆ」生成時の最初のスピード
     private float yuInitSpeedRandomRangeY = 5;
 
     private bool damageWaitFlag; //ダメージ時待機フラグ
     private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
-    private float damageWaitTime = 0.2f; //ダメージ待機時間
+    private float damageWaitTime = 0.3f; //ダメージ待機時間
 
     //=============================================================
-    public Sprite[] EnemyImages;
-    public int Id;
+    public Sprite[] EnemyImages; //見た目
+    public int Id; //ID
+
+    /// <summary>
+    /// 見てる方向
+    /// </summary>
+    public enum LookDirection {
+        Left = 0,
+        Right = 1,
+    }
+    public LookDirection lookDirection = LookDirection.Left;
 
     /// <summary>
     /// ステータス
@@ -38,12 +49,21 @@ public class Enemy : MonoBehaviour {
         public float Hp;
         public int HoldYu;
         public int ReflectDamage;
+
+        public float Size;
+        public Vector2 ColliderSize;
+
+        public float MoveSpeed;
     }
 
     private State[] state = {
-        new State {Id=0,Name="ジュース",Hp = 3,MaxHp = 3,HoldYu = 2,ReflectDamage=0},
-        new State {Id=1,Name="ハサミ",Hp =1,MaxHp = 1,HoldYu = 0,ReflectDamage=3},
-        new State {Id=1,Name="コーヒー",Hp =3,MaxHp = 3,HoldYu = 0,ReflectDamage=0}
+        new State {Id=0,Name="ジュース",Hp = 3,MaxHp = 3,HoldYu = 2,ReflectDamage=0,Size=0.5f,ColliderSize=new Vector2(1,1.4f),MoveSpeed=0},
+        new State {Id=1,Name="ハサミ",Hp =1,MaxHp = 1,HoldYu = 0,ReflectDamage=3,Size=0.5f,ColliderSize=new Vector2(1,1.4f),MoveSpeed=0},
+        new State {Id=2,Name="コーヒー",Hp =3,MaxHp = 3,HoldYu = 0,ReflectDamage=0,Size=0.5f,ColliderSize=new Vector2(1,1.4f),MoveSpeed=0},
+        new State {Id=3,Name="クルマ",Hp =3,MaxHp = 3,HoldYu = 0,ReflectDamage=3,Size=1.5f,ColliderSize=new Vector2(4f,1.9f),MoveSpeed=10f},
+
+        new State {Id=4,Name="ギュウニュウ",Hp =1,MaxHp = 1,HoldYu = 5,ReflectDamage=0,Size=0.5f,ColliderSize=new Vector2(1,1.4f),MoveSpeed=0},
+        new State {Id=5,Name="ウシ",Hp =40,MaxHp = 40,HoldYu = 0,ReflectDamage=10,Size=3,ColliderSize=new Vector2(8,5.4f),MoveSpeed=8f}
     };
 
     //=============================================================
@@ -52,6 +72,13 @@ public class Enemy : MonoBehaviour {
 
         //画像をidによって変える
         spriteRenderer.sprite = EnemyImages[Id];
+
+        //大きさをidによって変える
+        spriteRenderer.transform.localScale = Vector3.one * state[Id].Size;
+
+        //当たり判定の大きさをidによって変える
+        col.size = state[Id].ColliderSize;
+        colTrigger.size = state[Id].ColliderSize * colliderTriggerSizeRate;
     }
 
     //=============================================================
@@ -74,6 +101,33 @@ public class Enemy : MonoBehaviour {
     }
 
     private void Update () {
+        //速度が0じゃないなら
+        if(state[Id].MoveSpeed != 0) {
+            //ダメージ待機じゃないなら
+            if(!damageWaitFlag) {
+                //プレイヤーの位置で方向転換
+                if(transform.position.x <= player.transform.position.x) {
+                    lookDirection = LookDirection.Right;                 
+                } else {
+                    lookDirection = LookDirection.Left;
+                }
+
+                //方向によって移動
+                switch(lookDirection) {
+                    case LookDirection.Left:
+                    transform.eulerAngles = Vector3.zero;
+                    transform.position += Vector3.left * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
+                    break;
+
+                    case LookDirection.Right:
+                    transform.eulerAngles = new Vector3(0,180,0);
+                    transform.position += Vector3.right * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
+                    break;
+                }
+            }
+        }
+
+        //hpゲージにhpを適用
         hpGauge.value = state[Id].Hp / state[Id].MaxHp;
 
         if(damageWaitFlag && damageWaitCoroutine == null) {
@@ -88,6 +142,14 @@ public class Enemy : MonoBehaviour {
     /// <param name="time">待機時間</param>
     /// <returns></returns>
     private IEnumerator DamageWait (float time) {
+        if(state[Id].Name == "クルマ") {
+            soundManager.TriggerSE("SE009");
+        }
+
+        if(state[Id].Name=="ウシ") {
+            soundManager.TriggerSE("SE008");
+        }
+        
         float _time = 0;
         while(_time < time) {
             _time += Time.fixedDeltaTime * tsm.GetTimeScale();
