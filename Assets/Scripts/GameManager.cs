@@ -34,10 +34,10 @@ public class GameManager : MonoBehaviour {
 
     //=============================================================
     /// <summary>
-    /// 「ゆ」ポイントに加算する
+    /// 「ゆ」ポイントに数値を適用する
     /// </summary>
     /// <param name="num"></param>
-    public void AddYuPoint (int num) {
+    public void ApplyYuPoint (int num) {
         parameter.YuPoint += num;
     }
 }

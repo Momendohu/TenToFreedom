@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
     //=============================================================
+    private GameManager gameManager;
     private TimeSlowModule tsm;
     private SoundManager soundManager;
+    private GameObject player;
 
     private BoxCollider2D col;
     private BoxCollider2D colTrigger;
@@ -22,28 +24,42 @@ public class Enemy : MonoBehaviour {
     private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
     private float damageWaitTime = 0.2f; //ダメージ待機時間
 
+    //=============================================================
+    public Sprite[] EnemyImages;
+    public int Id;
+
     /// <summary>
     /// ステータス
     /// </summary>
     private struct State {
+        public int Id;
+        public string Name;
         public float MaxHp;
         public float Hp;
+        public int HoldYu;
+        public int ReflectDamage;
     }
 
-    private State state = new State {
-        Hp = 5,
-        MaxHp = 5,
+    private State[] state = {
+        new State {Id=0,Name="ジュース",Hp = 3,MaxHp = 3,HoldYu = 2,ReflectDamage=0},
+        new State {Id=1,Name="ハサミ",Hp =1,MaxHp = 1,HoldYu = 0,ReflectDamage=3},
+        new State {Id=1,Name="コーヒー",Hp =3,MaxHp = 3,HoldYu = 0,ReflectDamage=0}
     };
 
     //=============================================================
     private void Init () {
         CRef();
+
+        //画像をidによって変える
+        spriteRenderer.sprite = EnemyImages[Id];
     }
 
     //=============================================================
     private void CRef () {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        player = GameObject.Find("Player");
 
         col = transform.Find("ColliderBody").GetComponent<BoxCollider2D>();
         colTrigger = GetComponent<BoxCollider2D>();
@@ -58,7 +74,7 @@ public class Enemy : MonoBehaviour {
     }
 
     private void Update () {
-        hpGauge.value = state.Hp / state.MaxHp;
+        hpGauge.value = state[Id].Hp / state[Id].MaxHp;
 
         if(damageWaitFlag && damageWaitCoroutine == null) {
             damageWaitCoroutine = StartCoroutine(DamageWait(damageWaitTime));
@@ -112,10 +128,10 @@ public class Enemy : MonoBehaviour {
             yield return null;
         }
 
-        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
-        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
-        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
-        CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
+        for(int i = 0;i < state[Id].HoldYu;i++) {
+            CreateYu(transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
+        }
+
         Destroy(this.gameObject);
     }
 
@@ -130,18 +146,43 @@ public class Enemy : MonoBehaviour {
         if(!damageWaitFlag) {
             damageWaitFlag = true;
 
-            _rigidbody2D.velocity += vec.normalized * power; //速度加算
-            state.Hp -= damage; //ダメージを与える
-            CreateDamageText(transform.position + damageTextForwardPos,(int)damage); //ダメージ表示
+            //ダメージ量が0でないなら
+            if(damage != 0) {
+                _rigidbody2D.velocity += vec.normalized * power; //速度加算
+
+                state[Id].Hp -= damage; //ダメージを与える
+                CreateDamageText(transform.position + damageTextForwardPos,(int)damage); //ダメージ表示
+            } else {
+                //反射ダメージが0じゃないなら
+                if(state[Id].ReflectDamage == 0) {
+                    _rigidbody2D.velocity += vec.normalized * power; //速度加算
+                } else {
+                    //プレイヤー反射
+                    StartCoroutine(player.GetComponent<Player>().DamageWait(0.3f));
+                    Vector3 reflectVec = (player.transform.position - transform.position).normalized / 2f;
+                    reflectVec.z = 0;
+                    player.GetComponent<Player>().Speed += reflectVec;
+
+                    for(int i = 0;i < state[Id].ReflectDamage;i++) {
+                        CreateYu(player.transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
+                    }
+                }
+
+                gameManager.ApplyYuPoint(-state[Id].ReflectDamage);
+            }
 
             //hpが0になったら
-            if(state.Hp <= 0) {
+            if(state[Id].Hp <= 0) {
                 tsm.SlowFlag = true; //スロー処理
                 soundManager.TriggerSE("SE003");
                 StartCoroutine(DestroyAnim(10,5));
             } else {
                 if(damage == 0) {
-                    soundManager.TriggerSE("SE006");
+                    if(state[Id].ReflectDamage == 0) {
+                        soundManager.TriggerSE("SE006");
+                    } else {
+                        soundManager.TriggerSE("SE007");
+                    }
                 } else {
                     soundManager.TriggerSE("SE005");
                 }

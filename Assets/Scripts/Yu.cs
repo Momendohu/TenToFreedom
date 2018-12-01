@@ -23,6 +23,6 @@ public class Yu : MonoBehaviour {
     }
 
     private void OnDestroy () {
-        gameManager.AddYuPoint(1);
+        gameManager.ApplyYuPoint(1);
     }
 }

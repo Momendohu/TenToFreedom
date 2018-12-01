@@ -15,6 +15,10 @@ public class Player : MonoBehaviour {
     private float gravityScale = 2; //重力
 
     private Vector3 speed = Vector3.zero; //移動スピード(ジャンプ含む)
+    public Vector3 Speed {
+        get { return speed; }
+        set { speed = value; }
+    }
 
     private float maxSpeedX = 0.3f; //最大横速度
     private Vector3 acc = new Vector3(0.2f,0,0); //加速度
@@ -35,8 +39,9 @@ public class Player : MonoBehaviour {
     private enum ActionType {
         Normal = 0,
         Wait = 1,
-        TackleR = 2,
-        TackleL = 3,
+        Damage = 2,
+        TackleR = 3,
+        TackleL = 4,
     }
     private ActionType actionType = ActionType.Normal;
 
@@ -81,6 +86,10 @@ public class Player : MonoBehaviour {
             Move();
             break;
 
+            case ActionType.Damage:
+            _rigidbody2D.gravityScale = 2;
+            break;
+
             case ActionType.TackleR:
             _rigidbody2D.gravityScale = 0;
             _rigidbody2D.velocity = Vector3.zero;
@@ -116,6 +125,25 @@ public class Player : MonoBehaviour {
         if(speed.x < 0) {
             eye.transform.localPosition = new Vector3(-eyePos.x,eyePos.y,eyePos.z);
         }
+    }
+
+    //=============================================================
+    /// <summary>
+    /// ダメージ時の待機処理
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    public IEnumerator DamageWait (float time) {
+        actionType = ActionType.Damage;
+        float _time = 0;
+        while(_time < 1) {
+            _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
+
+            yield return null;
+        }
+
+        StartCoroutine(ActionWaitBefore(actionWaitTimeLength));
+        actionType = ActionType.Normal;
     }
 
     //=============================================================
@@ -292,19 +320,21 @@ public class Player : MonoBehaviour {
     /// </summary>
     /// <param name="collision"></param>
     private void OnTriggerEnter2D (Collider2D collision) {
-        if(collision.gameObject.tag == "Enemy") {
-            //通常アクションタイプでないなら
-            if(!(actionType == ActionType.Normal || actionType == ActionType.Wait)) {
-                collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,16,10);
-            } else {
-                collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,0);
+        if(actionType != ActionType.Damage) {
+            if(collision.gameObject.tag == "Enemy") {
+                //通常アクションタイプでないなら
+                if(!(actionType == ActionType.Normal || actionType == ActionType.Wait)) {
+                    collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,16,10);
+                } else {
+                    collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,0);
+                }
+            }
+
+            if(collision.gameObject.tag == "Yu") {
+                soundManager.TriggerSE("SE004");
+                Destroy(collision.gameObject);
             }
         }
-
-        if(collision.gameObject.tag == "Yu") {
-            soundManager.TriggerSE("SE004");
-            Destroy(collision.gameObject);
-        }   
     }
 
     //=============================================================
