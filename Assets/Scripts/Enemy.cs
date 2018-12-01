@@ -26,6 +26,14 @@ public class Enemy : MonoBehaviour {
     private Coroutine damageWaitCoroutine; //ダメージ待機コルーチン
     private float damageWaitTime = 0.3f; //ダメージ待機時間
 
+    private bool moveFlag = false; //動作フラグ
+    public bool MoveFlag {
+        get { return moveFlag; }
+        set { moveFlag = value; }
+    }
+
+    private bool moveOnce = false; //初期動作用フラグ
+
     //=============================================================
     public Sprite[] EnemyImages; //見た目
     public int Id; //ID
@@ -102,44 +110,49 @@ public class Enemy : MonoBehaviour {
         //当たり判定の大きさをidによって変える
         col.size = state[Id].ColliderSize;
         colTrigger.size = state[Id].ColliderSize * colliderTriggerSizeRate;
-
-        //特殊行動
-        StartCoroutine(UniqueAct());
     }
 
     private void Update () {
-        //速度が0じゃないなら
-        if(state[Id].MoveSpeed != 0) {
-            //ダメージ待機じゃないなら
-            if(!damageWaitFlag) {
-                //プレイヤーの位置で方向転換
-                if(transform.position.x <= player.transform.position.x) {
-                    lookDirection = LookDirection.Right;
-                } else {
-                    lookDirection = LookDirection.Left;
-                }
+        if(moveFlag) {
+            if(!moveOnce) {
+                //特殊行動
+                StartCoroutine(UniqueAct());
+                moveOnce = true;
+            }
 
-                //方向によって移動
-                switch(lookDirection) {
-                    case LookDirection.Left:
-                    transform.eulerAngles = Vector3.zero;
-                    transform.position += Vector3.left * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
-                    break;
+            //速度が0じゃないなら
+            if(state[Id].MoveSpeed != 0) {
+                //ダメージ待機じゃないなら
+                if(!damageWaitFlag) {
+                    //プレイヤーの位置で方向転換
+                    if(transform.position.x <= player.transform.position.x) {
+                        lookDirection = LookDirection.Right;
+                    } else {
+                        lookDirection = LookDirection.Left;
+                    }
 
-                    case LookDirection.Right:
-                    transform.eulerAngles = new Vector3(0,180,0);
-                    transform.position += Vector3.right * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
-                    break;
+                    //方向によって移動
+                    switch(lookDirection) {
+                        case LookDirection.Left:
+                        transform.eulerAngles = Vector3.zero;
+                        transform.position += Vector3.left * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
+                        break;
+
+                        case LookDirection.Right:
+                        transform.eulerAngles = new Vector3(0,180,0);
+                        transform.position += Vector3.right * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
+                        break;
+                    }
                 }
+            }
+
+            if(damageWaitFlag && damageWaitCoroutine == null) {
+                damageWaitCoroutine = StartCoroutine(DamageWait(damageWaitTime));
             }
         }
 
         //hpゲージにhpを適用
         hpGauge.value = state[Id].Hp / state[Id].MaxHp;
-
-        if(damageWaitFlag && damageWaitCoroutine == null) {
-            damageWaitCoroutine = StartCoroutine(DamageWait(damageWaitTime));
-        }
     }
 
     //=============================================================
@@ -232,7 +245,8 @@ public class Enemy : MonoBehaviour {
                     reflectVec.z = 0;
                     player.GetComponent<Player>().Speed += reflectVec;
 
-                    for(int i = 0;i < state[Id].ReflectDamage;i++) {
+                    //「ゆ」を落とす(ダメージの1/2)
+                    for(int i = 0;i < state[Id].ReflectDamage / 2;i++) {
                         CreateYu(player.transform.position,yuInitSpeed + new Vector2(Random.Range(-yuInitSpeedRandomRangeY,yuInitSpeedRandomRangeY),0));
                     }
                 }
@@ -307,6 +321,8 @@ public class Enemy : MonoBehaviour {
                 transform.position = Vector3.Lerp(transform.position,goal,0.1f);
                 yield return null;
             }
+
+            soundManager.TriggerSE("SE011");
 
             GenerateObj();
             StartCoroutine(DestroyAnim(10,5));

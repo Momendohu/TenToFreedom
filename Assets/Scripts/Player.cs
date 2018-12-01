@@ -342,6 +342,22 @@ public class Player : MonoBehaviour {
     /// </summary>
     /// <param name="collision"></param>
     private void OnCollisionStay2D (Collision2D collision) {
+        if(actionType != ActionType.Damage) {
+            if(collision.gameObject.tag == "Enemy") {
+                //通常アクションタイプでないなら
+                if(!(actionType == ActionType.Normal || actionType == ActionType.Wait)) {
+                    collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,16,10);
+                } else {
+                    collision.gameObject.GetComponent<Enemy>().Collide(speed + blowUpPower,8,0);
+                }
+            }
+
+            if(collision.gameObject.tag == "Yu") {
+                soundManager.TriggerSE("SE004");
+                Destroy(collision.gameObject);
+            }
+        }
+
         if(collision.gameObject.tag == "ReflectionWall") {
             transform.position += speed * (-1);
         }

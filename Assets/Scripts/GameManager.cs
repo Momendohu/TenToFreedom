@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public Parameter parameter = new Parameter {
-        YuPoint = 10,
+        YuPoint = 1,
     };
 
     //=============================================================
