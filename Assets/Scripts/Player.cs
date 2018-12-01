@@ -142,7 +142,6 @@ public class Player : MonoBehaviour {
             yield return null;
         }
 
-        StartCoroutine(ActionWaitBefore(actionWaitTimeLength));
         actionType = ActionType.Normal;
     }
 

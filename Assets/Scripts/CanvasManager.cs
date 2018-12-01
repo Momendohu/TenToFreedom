@@ -41,7 +41,7 @@ public class CanvasManager : MonoBehaviour {
     /// 「ゆ」ポイントを表示に適用する
     /// </summary>
     public void ApplyYuPointText (int num) {
-        yuPointText.text = "YP:" + num;
+        yuPointText.text = ""+num;
     }
 
     //=============================================================
