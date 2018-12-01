@@ -5,5 +5,5 @@ using UnityEngine;
 
 public static class Constant {
     public static readonly float SLOW_TIME_SCALE = 0.01f; //0
-    public static readonly float SLOW_TIME_LENGTH = 1f; //0.3
+    public static readonly float SLOW_TIME_LENGTH = 0.5f; //0.3
 }
