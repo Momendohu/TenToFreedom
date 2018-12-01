@@ -45,6 +45,8 @@ public class Enemy : MonoBehaviour {
         Left = 0,
         Right = 1,
     }
+
+    [System.NonSerialized]
     public LookDirection lookDirection = LookDirection.Left;
 
     /// <summary>
