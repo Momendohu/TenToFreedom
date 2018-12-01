@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
     private CanvasManager canvasManager;
 
     private Rigidbody2D _rigidbody2D;
+    private SpriteRenderer spriteRenderer;
     private GameObject eye;
     private SoundManager soundManager;
 
@@ -56,6 +57,7 @@ public class Player : MonoBehaviour {
         canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
 
         _rigidbody2D = this.GetComponent<Rigidbody2D>();
+        spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         eye = transform.Find("Eye").gameObject;
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
     }
@@ -137,6 +139,8 @@ public class Player : MonoBehaviour {
         actionType = ActionType.Damage;
         float _time = 0;
         while(_time < 1) {
+            //点滅
+            spriteRenderer.color = new Color(0,0,0,1 - Mathf.Sin(_time * Mathf.Deg2Rad * 180 * 6));
             _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
 
             yield return null;

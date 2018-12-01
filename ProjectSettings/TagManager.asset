@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Yu
   - ReflectionWall
+  - Cage
   layers:
   - Default
   - TransparentFX

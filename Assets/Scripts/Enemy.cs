@@ -76,7 +76,8 @@ public class Enemy : MonoBehaviour {
         new State {Id=5,Name="ニュウギュウ",Hp =100,MaxHp = 100,HoldYu =100,ReflectDamage=8,Size=3,ColliderSize=new Vector2(8,5.4f),MoveSpeed=8f},
 
         new State{ Id=6,Name="シアワセノネコ",Hp =9999,MaxHp = 9999,HoldYu = 0,ReflectDamage=0,Size=1,ColliderSize=new Vector2(2.3f,2.6f),MoveSpeed=0},
-        new State{ Id=7,Name="キュウシュウ",Hp =100,MaxHp = 100,HoldYu = 100,ReflectDamage=8,Size=2,ColliderSize=new Vector2(9,11.6f),MoveSpeed=0}
+        new State{ Id=7,Name="キュウシュウ",Hp =100,MaxHp = 100,HoldYu = 100,ReflectDamage=8,Size=2,ColliderSize=new Vector2(9,11.6f),MoveSpeed=0},
+        new State{ Id=8,Name="オリ",Hp =1,MaxHp = 1,HoldYu = 0,ReflectDamage=0,Size=4,ColliderSize=new Vector2(10,10),MoveSpeed=0}
     };
 
     //=============================================================
@@ -239,12 +240,13 @@ public class Enemy : MonoBehaviour {
                 CreateDamageText(transform.position + damageTextForwardPos,(int)damage); //ダメージ表示
             } else {
                 //反射ダメージが0じゃないなら
-                if(state[Id].ReflectDamage == 0) {
+                if(state[Id].ReflectDamage == 0 && state[Id].Name != "オリ") {
                     _rigidbody2D.velocity += vec.normalized * power; //速度加算
                 } else {
                     //プレイヤー反射
                     StartCoroutine(player.GetComponent<Player>().DamageWait(0.3f));
-                    Vector3 reflectVec = (player.transform.position - transform.position + Vector3.up*0.3f).normalized / 2f; //少し上に補正
+                    Vector3 reflectVec = (player.transform.position - transform.position + Vector3.up * 0.5f).normalized / 2f; //少し上に補正
+                    reflectVec.y *= 0.5f; //y軸方向の速度を1/2に
                     reflectVec.z = 0;
                     player.GetComponent<Player>().Speed += reflectVec;
 
@@ -264,7 +266,7 @@ public class Enemy : MonoBehaviour {
                 StartCoroutine(DestroyAnim(10,5));
             } else {
                 if(damage == 0) {
-                    if(state[Id].ReflectDamage == 0) {
+                    if(state[Id].ReflectDamage == 0 && state[Id].Name != "オリ") {
                         soundManager.TriggerSE("SE006");
                     } else {
                         soundManager.TriggerSE("SE007");
