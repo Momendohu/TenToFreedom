@@ -244,7 +244,7 @@ public class Enemy : MonoBehaviour {
                 } else {
                     //プレイヤー反射
                     StartCoroutine(player.GetComponent<Player>().DamageWait(0.3f));
-                    Vector3 reflectVec = (player.transform.position - transform.position).normalized / 2f;
+                    Vector3 reflectVec = (player.transform.position - transform.position + Vector3.up*0.3f).normalized / 2f; //少し上に補正
                     reflectVec.z = 0;
                     player.GetComponent<Player>().Speed += reflectVec;
 
