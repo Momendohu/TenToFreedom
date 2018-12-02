@@ -15,6 +15,21 @@ public class GameManager : MonoBehaviour {
         YuPoint = 1,
     };
 
+    //ゲームスタート演習終了フラグ
+    private bool gameStartEndedFlag;
+    public bool GameStartEndedFlag {
+        get { return gameStartEndedFlag; }
+        set { gameStartEndedFlag = value; }
+
+    }
+
+    //ゲームスタートフラグ
+    private bool gameStartFlag;
+    public bool GameStartFlag {
+        get { return gameStartFlag; }
+        set { gameStartFlag = value; }
+    }
+
     //ボス出現フラグ
     private bool bossAppearFlag;
     public bool BossAppearFlag {
@@ -29,6 +44,7 @@ public class GameManager : MonoBehaviour {
         set { bossDefeatFlag = value; }
     }
 
+    private bool gameStartOnce;
     private bool bossAppearOnce;
     private bool bossDefeatOnce;
 
@@ -46,28 +62,39 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Start () {
-        soundManager.TriggerBGM("BGM001",true);
         superOri1.SetActive(false);
     }
 
     private void Update () {
-        canvasManager.ApplyYuPointText(parameter.YuPoint);
-
-        //ボスフラグ発生時一回だけ処理
-        if(bossAppearFlag) {
-            if(!bossAppearOnce) {
-                StartCoroutine(BossAppearPerform());
-                bossAppearOnce = true;
+        if(gameStartFlag) {
+            if(!gameStartOnce) {
+                soundManager.TriggerBGM("BGM001",true);
+                gameStartOnce = true;
             }
-        }
 
-        //ボスフラグ発生時一回だけ処理
-        if(bossDefeatFlag) {
-            if(!bossDefeatOnce) {
-                StartCoroutine(BossDefeatPerform());
-                superOri1.SetActive(false);
-                superOri2.SetActive(false);
-                bossDefeatOnce = true;
+            canvasManager.ApplyYuPointText(parameter.YuPoint);
+
+            //ボスフラグ発生時一回だけ処理
+            if(bossAppearFlag) {
+                if(!bossAppearOnce) {
+                    StartCoroutine(BossAppearPerform());
+                    bossAppearOnce = true;
+                }
+            }
+
+            //ボスフラグ発生時一回だけ処理
+            if(bossDefeatFlag) {
+                if(!bossDefeatOnce) {
+                    StartCoroutine(BossDefeatPerform());
+                    superOri1.SetActive(false);
+                    superOri2.SetActive(false);
+                    bossDefeatOnce = true;
+                }
+            }
+        } else {
+            if(InputController.IsPushButtonDown(KeyCode.Space)) {
+                soundManager.TriggerSE("SE013");
+                gameStartFlag = true;
             }
         }
     }
@@ -104,7 +131,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="num"></param>
     public void ApplyYuPoint (int num) {
         parameter.YuPoint += num;
-        if(parameter.YuPoint<0) {
+        if(parameter.YuPoint < 0) {
             parameter.YuPoint = 0;
         }
     }

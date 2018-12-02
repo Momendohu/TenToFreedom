@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     //=============================================================
+    private GameManager gameManager;
     private TimeSlowModule tsm;
     private CanvasManager canvasManager;
 
@@ -43,8 +44,9 @@ public class Player : MonoBehaviour {
         Damage = 2,
         TackleR = 3,
         TackleL = 4,
+        TitleWait = 5,
     }
-    private ActionType actionType = ActionType.Normal;
+    private ActionType actionType = ActionType.TitleWait;
 
     //=============================================================
     private void Init () {
@@ -53,6 +55,7 @@ public class Player : MonoBehaviour {
 
     //=============================================================
     private void CRef () {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
         canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
 
@@ -109,6 +112,12 @@ public class Player : MonoBehaviour {
             _rigidbody2D.velocity = Vector3.zero;
             speed.x = -maxSpeedX * attackSpeedRate;
             speed.y = 0;
+            break;
+
+            case ActionType.TitleWait:
+            if(gameManager.GameStartEndedFlag) {
+                actionType = ActionType.Normal;
+            }
             break;
 
             default:

@@ -28,14 +28,6 @@ public class CanvasManager : MonoBehaviour {
         Init();
     }
 
-    private void Start () {
-
-    }
-
-    private void Update () {
-
-    }
-
     //=============================================================
     /// <summary>
     /// 「ゆ」ポイントを表示に適用する
