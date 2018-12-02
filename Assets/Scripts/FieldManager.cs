@@ -45,10 +45,14 @@ public class FieldManager : MonoBehaviour {
         }
 
         for(int i = 15;i < 45;i++) {
-            if(i!=18) {
+            if(i != 18) {
                 CreateBlock(new Vector3(i * blockSize,blockSize * 2,0) + fieldBasePosition,"ReflectionWall");
             }
-            
+
+            CreateBlock(new Vector3(i * blockSize,-blockSize,0) + fieldBasePosition);
+        }
+
+        for(int i = 45;i < 300;i++) {
             CreateBlock(new Vector3(i * blockSize,-blockSize,0) + fieldBasePosition);
         }
 

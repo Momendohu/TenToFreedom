@@ -45,6 +45,7 @@ public class Player : MonoBehaviour {
         TackleR = 3,
         TackleL = 4,
         TitleWait = 5,
+        GameClearWait = 6,
     }
     private ActionType actionType = ActionType.TitleWait;
 
@@ -120,6 +121,10 @@ public class Player : MonoBehaviour {
             }
             break;
 
+            case ActionType.GameClearWait:
+            Move();
+            break;
+
             default:
             break;
         }
@@ -160,7 +165,12 @@ public class Player : MonoBehaviour {
             yield return null;
         }
 
-        actionType = ActionType.Normal;
+        //ゲームクリア状態かどうかで遷移を変える
+        if(gameManager.GameClearFlag) {
+            actionType = ActionType.GameClearWait;
+        } else {
+            actionType = ActionType.Normal;
+        }
     }
 
     //=============================================================
@@ -201,7 +211,12 @@ public class Player : MonoBehaviour {
         }
 
         actionWaitTime = 1;
-        actionType = ActionType.Normal;
+        //ゲームクリア状態かどうかで遷移を変える
+        if(gameManager.GameClearFlag) {
+            actionType = ActionType.GameClearWait;
+        } else {
+            actionType = ActionType.Normal;
+        }
     }
 
     //=============================================================
@@ -241,8 +256,15 @@ public class Player : MonoBehaviour {
     /// 左右移動
     /// </summary>
     private void Move () {
-        bool r = InputController.IsPushButton(KeyCode.RightArrow) || InputController.IsPushButton(KeyCode.D);
-        bool l = InputController.IsPushButton(KeyCode.LeftArrow) || InputController.IsPushButton(KeyCode.A);
+        bool r = false;
+        bool l = false;
+
+        if(gameManager.GameClearFlag) {
+            r = true;
+        } else {
+            r = InputController.IsPushButton(KeyCode.RightArrow) || InputController.IsPushButton(KeyCode.D);
+            l = InputController.IsPushButton(KeyCode.LeftArrow) || InputController.IsPushButton(KeyCode.A);
+        }
 
         //両方押し
         if(r && l) {
@@ -351,6 +373,11 @@ public class Player : MonoBehaviour {
                 soundManager.TriggerSE("SE004");
                 Destroy(collision.gameObject);
             }
+        }
+
+        if(collision.gameObject.tag == "ClearBox") {
+            gameManager.GameClearFlag = true;
+            actionType = ActionType.GameClearWait;
         }
     }
 

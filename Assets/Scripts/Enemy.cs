@@ -73,7 +73,7 @@ public class Enemy : MonoBehaviour {
         new State {Id=3,Name="クルマ",Hp =3,MaxHp = 3,HoldYu = 0,ReflectDamage=3,Size=1.5f,ColliderSize=new Vector2(4f,1.9f),MoveSpeed=10f},
 
         new State {Id=4,Name="ギュウニュウ",Hp =1,MaxHp = 1,HoldYu = 5,ReflectDamage=0,Size=0.5f,ColliderSize=new Vector2(1,1.4f),MoveSpeed=0},
-        new State {Id=5,Name="ニュウギュウ",Hp =100,MaxHp = 100,HoldYu =100,ReflectDamage=8,Size=3,ColliderSize=new Vector2(8,5.4f),MoveSpeed=8f},
+        new State {Id=5,Name="ニュウギュウ",Hp =1,MaxHp = 1,HoldYu =100,ReflectDamage=8,Size=3,ColliderSize=new Vector2(8,5.4f),MoveSpeed=8f},
 
         new State{ Id=6,Name="シアワセノネコ",Hp =9999,MaxHp = 9999,HoldYu = 0,ReflectDamage=0,Size=1,ColliderSize=new Vector2(2.3f,2.6f),MoveSpeed=0},
         new State{ Id=7,Name="キュウシュウ",Hp =100,MaxHp = 100,HoldYu = 100,ReflectDamage=8,Size=2,ColliderSize=new Vector2(9,11.6f),MoveSpeed=0},

@@ -86,7 +86,7 @@ public class TitleUI : MonoBehaviour {
         soundManager.TriggerSE("SE014");
 
         float time3 = -1;
-        while(time3 < 0.2f) {
+        while(time3 < 0.1f) {
             time3 += Time.fixedDeltaTime;
             if(time3 >= 0) {
                 spotFrame.transform.localScale += Vector3.one;

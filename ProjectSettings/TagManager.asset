@@ -8,6 +8,7 @@ TagManager:
   - Yu
   - ReflectionWall
   - Cage
+  - ClearBox
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     /// <summary>
@@ -28,6 +29,13 @@ public class GameManager : MonoBehaviour {
     public bool GameStartFlag {
         get { return gameStartFlag; }
         set { gameStartFlag = value; }
+    }
+
+    //ゲームクリアフラグ
+    private bool gameClearFlag;
+    public bool GameClearFlag {
+        get { return gameClearFlag; }
+        set { gameClearFlag = value; }
     }
 
     //ボス出現フラグ
@@ -95,6 +103,13 @@ public class GameManager : MonoBehaviour {
             if(InputController.IsPushButtonDown(KeyCode.Space)) {
                 soundManager.TriggerSE("SE013");
                 gameStartFlag = true;
+            }
+        }
+
+        if(gameClearFlag) {
+            if(InputController.IsPushButtonDown(KeyCode.Space)) {
+                soundManager.StopBGM("BGM001");
+                SceneManager.LoadScene("Title");
             }
         }
     }
