@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private bool gameStartOnce;
+    private bool gameCrearOnce;
     private bool bossAppearOnce;
     private bool bossDefeatOnce;
 
@@ -107,6 +108,14 @@ public class GameManager : MonoBehaviour {
         }
 
         if(gameClearFlag) {
+            //ゲームクリア時一回だけ処理
+            if(!gameCrearOnce) {
+                //スコアのランキングへの適用、ランキング表示
+                naichilab.RankingLoader.Instance.SendScoreAndShowRanking(parameter.YuPoint);
+
+                gameCrearOnce = true;
+            }
+
             if(InputController.IsPushButtonDown(KeyCode.Space)) {
                 soundManager.StopBGM("BGM001");
                 SceneManager.LoadScene("Title");
