@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     }
 
     //ゲームクリアフラグ
-    private bool gameClearFlag;
+    private bool gameClearFlag = true;
     public bool GameClearFlag {
         get { return gameClearFlag; }
         set { gameClearFlag = value; }
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour {
                 gameCrearOnce = true;
             }
 
-            if(InputController.IsPushButtonDown(KeyCode.Space)) {
+            if(InputController.IsPushButtonDown(KeyCode.B)) {
                 soundManager.StopBGM("BGM001");
                 SceneManager.LoadScene("Title");
             }
