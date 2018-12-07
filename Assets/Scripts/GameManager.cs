@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     }
 
     //ゲームクリアフラグ
-    private bool gameClearFlag = true;
+    private bool gameClearFlag;
     public bool GameClearFlag {
         get { return gameClearFlag; }
         set { gameClearFlag = value; }
