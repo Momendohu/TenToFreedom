@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour {
     //=============================================================
     private GameManager gameManager;
-    private TimeSlowModule tsm;
     private GameObject player;
 
     private BoxCollider2D col;
@@ -87,7 +86,6 @@ public class Enemy : MonoBehaviour {
     //=============================================================
     private void CRef () {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
         player = GameObject.Find("Player");
         col = transform.Find("ColliderBody").GetComponent<BoxCollider2D>();
         colTrigger = GetComponent<BoxCollider2D>();
@@ -136,12 +134,12 @@ public class Enemy : MonoBehaviour {
                     switch(lookDirection) {
                         case LookDirection.Left:
                         transform.eulerAngles = Vector3.zero;
-                        transform.position += Vector3.left * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
+                        transform.position += Vector3.left * state[Id].MoveSpeed * Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale();
                         break;
 
                         case LookDirection.Right:
                         transform.eulerAngles = new Vector3(0,180,0);
-                        transform.position += Vector3.right * state[Id].MoveSpeed * Time.fixedDeltaTime * tsm.GetTimeScale();
+                        transform.position += Vector3.right * state[Id].MoveSpeed * Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale();
                         break;
                     }
                 }
@@ -173,7 +171,7 @@ public class Enemy : MonoBehaviour {
 
         float _time = 0;
         while(_time < time) {
-            _time += Time.fixedDeltaTime * tsm.GetTimeScale();
+            _time += Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale();
 
             yield return null;
         }
@@ -204,9 +202,9 @@ public class Enemy : MonoBehaviour {
         //消える演出
         float time = 0;
         while(time < 1) {
-            time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
+            time += Time.fixedDeltaTime * speed * TimeSlowModule.Instance.GetTimeScale();
             spriteRenderer.color = new Color(1,1,1,1 - time);
-            transform.localScale += Time.fixedDeltaTime * Vector3.one * size * tsm.GetTimeScale();
+            transform.localScale += Time.fixedDeltaTime * Vector3.one * size * TimeSlowModule.Instance.GetTimeScale();
 
             yield return null;
         }
@@ -276,7 +274,7 @@ public class Enemy : MonoBehaviour {
 
             //hpが0になったら
             if(state[Id].Hp <= 0) {
-                tsm.SlowFlag = true; //スロー処理
+                TimeSlowModule.Instance.SlowFlag = true; //スロー処理
                 AudioManager.Instance.PlaySE("SE003");
                 StartCoroutine(DestroyAnim(10,5));
             } else {
@@ -337,7 +335,7 @@ public class Enemy : MonoBehaviour {
             AudioManager.Instance.PlaySE("SE010");
             while(time < 2) {
                 Vector3 goal = transform.position + Vector3.up * 0.5f;
-                time += Time.fixedDeltaTime * tsm.GetTimeScale();
+                time += Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale();
                 transform.position = Vector3.Lerp(transform.position,goal,0.1f);
                 yield return null;
             }

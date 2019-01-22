@@ -6,7 +6,6 @@ using UnityEngine;
 public class Player : MonoBehaviour {
     //=============================================================
     private GameManager gameManager;
-    private TimeSlowModule tsm;
     private CanvasManager canvasManager;
 
     private Rigidbody2D _rigidbody2D;
@@ -56,7 +55,6 @@ public class Player : MonoBehaviour {
     //=============================================================
     private void CRef () {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
         canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
 
         _rigidbody2D = this.GetComponent<Rigidbody2D>();
@@ -129,7 +127,7 @@ public class Player : MonoBehaviour {
 
 
         //Debug.Log(speed);
-        transform.position += speed * tsm.GetTimeScale();
+        transform.position += speed * TimeSlowModule.Instance.GetTimeScale();
     }
 
     //=============================================================
@@ -158,7 +156,7 @@ public class Player : MonoBehaviour {
         while(_time < 1) {
             //点滅
             spriteRenderer.color = new Color(0,0,0,1 - Mathf.Sin(_time * Mathf.Deg2Rad * 180 * 18));
-            _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
+            _time += Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale() / time;
 
             yield return null;
         }
@@ -183,7 +181,7 @@ public class Player : MonoBehaviour {
 
         float _time = 0;
         while(_time < 1) {
-            _time += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
+            _time += Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale() / time;
 
             yield return null;
         }
@@ -203,7 +201,7 @@ public class Player : MonoBehaviour {
     private IEnumerator ActionWaitBefore (float time) {
         actionWaitTime = 0;
         while(actionWaitTime < 1) {
-            actionWaitTime += Time.fixedDeltaTime * tsm.GetTimeScale() / time;
+            actionWaitTime += Time.fixedDeltaTime * TimeSlowModule.Instance.GetTimeScale() / time;
 
             yield return null;
         }
@@ -306,7 +304,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void DriveUp (float limit,float power) {
-        speed += jumpPower * Time.fixedDeltaTime * power * tsm.GetTimeScale();
+        speed += jumpPower * Time.fixedDeltaTime * power * TimeSlowModule.Instance.GetTimeScale();
         if(speed.y >= limit) {
             speed.y = limit;
         }
@@ -319,7 +317,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void Drivedown (float limit,float power) {
-        speed -= jumpPower * Time.fixedDeltaTime * power * tsm.GetTimeScale();
+        speed -= jumpPower * Time.fixedDeltaTime * power * TimeSlowModule.Instance.GetTimeScale();
         if(speed.y <= limit) {
             speed.y = limit;
         }
@@ -332,7 +330,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void DriveRight (float limit,float power) {
-        speed += acc * Time.fixedDeltaTime * power * tsm.GetTimeScale();
+        speed += acc * Time.fixedDeltaTime * power * TimeSlowModule.Instance.GetTimeScale();
         if(speed.x >= limit) {
             speed.x = limit;
         }
@@ -345,7 +343,7 @@ public class Player : MonoBehaviour {
     /// <param name="limit">速度制限</param>
     /// <param name="power">効果の強さ</param>
     private void DriveLeft (float limit,float power) {
-        speed -= acc * Time.fixedDeltaTime * power * tsm.GetTimeScale();
+        speed -= acc * Time.fixedDeltaTime * power * TimeSlowModule.Instance.GetTimeScale();
         if(speed.x <= limit) {
             speed.x = limit;
         }

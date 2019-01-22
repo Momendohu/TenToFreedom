@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerEye : MonoBehaviour {
     //=============================================================
-    private TimeSlowModule tsm;
-
     private MeshRenderer meshRenderer;
 
     private float blinkProb = 2; //瞬きする確率
@@ -19,7 +17,6 @@ public class PlayerEye : MonoBehaviour {
 
     //=============================================================
     private void CRef () {
-        tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
@@ -46,7 +43,7 @@ public class PlayerEye : MonoBehaviour {
     private IEnumerator Blink (float speed) {
         float time = 0;
         while(time < 1) {
-            time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
+            time += Time.fixedDeltaTime * speed * TimeSlowModule.Instance.GetTimeScale();
             transform.localScale = new Vector3(1,1 - Mathf.Sin(Mathf.Deg2Rad * 180 * time),1);
 
             yield return null;

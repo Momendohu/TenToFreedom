@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.UI;
 
-public class TimeSlowModule : MonoBehaviour {
+public class TimeSlowModule : SingletonMonoBehaviour<TimeSlowModule> {
     //=============================================================
     private Coroutine coroutine;
 

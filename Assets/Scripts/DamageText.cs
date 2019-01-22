@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class DamageText : MonoBehaviour {
     //=============================================================
-    private TimeSlowModule tsm;
     private TextMesh textMesh;
 
     //=============================================================
@@ -15,7 +14,6 @@ public class DamageText : MonoBehaviour {
 
     //=============================================================
     private void CRef () {
-        tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
         textMesh = GetComponent<TextMesh>();
     }
 
@@ -39,7 +37,7 @@ public class DamageText : MonoBehaviour {
     private IEnumerator ToDestroy (float speed,float displayTime) {
         float time = 0;
         while((displayTime - time) > 0) {
-            time += Time.fixedDeltaTime * speed * tsm.GetTimeScale();
+            time += Time.fixedDeltaTime * speed * TimeSlowModule.Instance.GetTimeScale();
 
             textMesh.color = new Color(0,0,0,displayTime - time);
 
@@ -58,7 +56,7 @@ public class DamageText : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator MoveToAbove (float speed,Vector3 goal) {
         while(true) {
-            transform.position = Vector3.Lerp(transform.position,goal,Mathf.Clamp01(speed * tsm.GetTimeScale()));
+            transform.position = Vector3.Lerp(transform.position,goal,Mathf.Clamp01(speed * TimeSlowModule.Instance.GetTimeScale()));
 
             yield return null;
         }
