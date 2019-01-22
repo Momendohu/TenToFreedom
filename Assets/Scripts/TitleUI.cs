@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class TitleUI : MonoBehaviour {
     //=============================================================
     private GameManager gameManager;
-    private SoundManager soundManager;
     private Text title;
     private Text titleShadow;
     private Image titleImage;
@@ -26,7 +25,6 @@ public class TitleUI : MonoBehaviour {
     //=============================================================
     private void CRef () {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         title = transform.Find("Title/Text").GetComponent<Text>();
         titleShadow = transform.Find("Title/Shadow").GetComponent<Text>();
         titleImage = transform.Find("Title/Image").GetComponent<Image>();
@@ -83,7 +81,7 @@ public class TitleUI : MonoBehaviour {
         }
 
         Destroy(vail);
-        soundManager.TriggerSE("SE014");
+        AudioManager.Instance.PlaySE("SE014");
 
         float time3 = -1;
         while(time3 < 0.1f) {

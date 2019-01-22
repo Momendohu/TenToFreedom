@@ -12,7 +12,6 @@ public class Player : MonoBehaviour {
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer spriteRenderer;
     private GameObject eye;
-    private SoundManager soundManager;
 
     private float gravityScale = 2; //重力
 
@@ -63,7 +62,6 @@ public class Player : MonoBehaviour {
         _rigidbody2D = this.GetComponent<Rigidbody2D>();
         spriteRenderer = transform.Find("Body").GetComponent<SpriteRenderer>();
         eye = transform.Find("Eye").gameObject;
-        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
     }
 
     //=============================================================
@@ -227,11 +225,11 @@ public class Player : MonoBehaviour {
         if(InputController.IsPushButtonDown(KeyCode.Space)) {
             if(speed.x > 0) {
                 StartCoroutine(ActionWait(waitTime,CreateTakcleEffect()));
-                soundManager.TriggerSE("SE001");
+                AudioManager.Instance.PlaySE("SE001");
                 actionType = ActionType.TackleR;
             } else if(speed.x < 0) {
                 StartCoroutine(ActionWait(waitTime,CreateTakcleEffect()));
-                soundManager.TriggerSE("SE001");
+                AudioManager.Instance.PlaySE("SE001");
                 actionType = ActionType.TackleL;
             }
         }
@@ -243,7 +241,7 @@ public class Player : MonoBehaviour {
     /// </summary>
     private void Jump () {
         if(InputController.IsPushButtonDown(KeyCode.UpArrow) || InputController.IsPushButtonDown(KeyCode.W)) {
-            soundManager.TriggerSE("SE002");
+            AudioManager.Instance.PlaySE("SE002");
             _rigidbody2D.velocity = Vector3.zero;
             DriveUp(maxJumpPower,3);
         } else {
@@ -370,7 +368,7 @@ public class Player : MonoBehaviour {
             }
 
             if(collision.gameObject.tag == "Yu") {
-                soundManager.TriggerSE("SE004");
+                AudioManager.Instance.PlaySE("SE004");
                 Destroy(collision.gameObject);
             }
         }
@@ -398,7 +396,7 @@ public class Player : MonoBehaviour {
             }
 
             if(collision.gameObject.tag == "Yu") {
-                soundManager.TriggerSE("SE004");
+                AudioManager.Instance.PlaySE("SE004");
                 Destroy(collision.gameObject);
             }
         }

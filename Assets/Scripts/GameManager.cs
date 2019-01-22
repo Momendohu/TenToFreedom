@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
@@ -59,13 +58,11 @@ public class GameManager : MonoBehaviour {
 
     //=============================================================
     private CanvasManager canvasManager;
-    private SoundManager soundManager;
     private GameObject superOri1; //ボス用オリの管理のため
     private GameObject superOri2; //ボス用オリの管理のため
 
     private void Awake () {
         canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
-        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         superOri1 = GameObject.Find("Field/Object/SuperOris/SuperOri1");
         superOri2 = GameObject.Find("Field/Object/SuperOris/SuperOri2");
     }
@@ -77,7 +74,7 @@ public class GameManager : MonoBehaviour {
     private void Update () {
         if(gameStartFlag) {
             if(!gameStartOnce) {
-                soundManager.TriggerBGM("BGM001",true);
+                AudioManager.Instance.PlayBGM("BGM001");
                 gameStartOnce = true;
             }
 
@@ -102,7 +99,7 @@ public class GameManager : MonoBehaviour {
             }
         } else {
             if(InputController.IsPushButtonDown(KeyCode.Space)) {
-                soundManager.TriggerSE("SE013");
+                AudioManager.Instance.PlaySE("SE013");
                 gameStartFlag = true;
             }
         }
@@ -117,7 +114,7 @@ public class GameManager : MonoBehaviour {
             }
 
             if(InputController.IsPushButtonDown(KeyCode.B)) {
-                soundManager.StopBGM("BGM001");
+                AudioManager.Instance.StopBGM();
                 SceneManager.LoadScene("Title");
             }
         }
@@ -127,14 +124,14 @@ public class GameManager : MonoBehaviour {
     private IEnumerator BossAppearPerform () {
         CreateBoss(new Vector3(531.4f,9,0));
         superOri1.SetActive(true);
-        soundManager.TriggerSE("SE012");
+        AudioManager.Instance.PlaySE("SE012");
 
         yield return null;
     }
 
     //=============================================================
     private IEnumerator BossDefeatPerform () {
-        soundManager.TriggerSE("SE012");
+        AudioManager.Instance.PlaySE("SE013");
 
         yield return null;
     }

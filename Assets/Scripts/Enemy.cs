@@ -7,7 +7,6 @@ public class Enemy : MonoBehaviour {
     //=============================================================
     private GameManager gameManager;
     private TimeSlowModule tsm;
-    private SoundManager soundManager;
     private GameObject player;
 
     private BoxCollider2D col;
@@ -89,9 +88,7 @@ public class Enemy : MonoBehaviour {
     private void CRef () {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         tsm = GameObject.Find("TimeSlowModule").GetComponent<TimeSlowModule>();
-        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         player = GameObject.Find("Player");
-
         col = transform.Find("ColliderBody").GetComponent<BoxCollider2D>();
         colTrigger = GetComponent<BoxCollider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -167,11 +164,11 @@ public class Enemy : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator DamageWait (float time) {
         if(state[Id].Name == "クルマ") {
-            soundManager.TriggerSE("SE009");
+            AudioManager.Instance.PlaySE("SE009");
         }
 
         if(state[Id].Name == "ニュウギュウ") {
-            soundManager.TriggerSE("SE008");
+            AudioManager.Instance.PlaySE("SE008");
         }
 
         float _time = 0;
@@ -221,7 +218,7 @@ public class Enemy : MonoBehaviour {
 
         //ギュウニュウならボスフラグを立てる
         if(state[Id].Name == "ギュウニュウ") {
-            soundManager.TriggerSE("SE008");
+            AudioManager.Instance.PlaySE("SE008");
             gameManager.BossAppearFlag = true;
         }
 
@@ -280,17 +277,17 @@ public class Enemy : MonoBehaviour {
             //hpが0になったら
             if(state[Id].Hp <= 0) {
                 tsm.SlowFlag = true; //スロー処理
-                soundManager.TriggerSE("SE003");
+                AudioManager.Instance.PlaySE("SE003");
                 StartCoroutine(DestroyAnim(10,5));
             } else {
                 if(damage == 0) {
                     if(state[Id].ReflectDamage == 0 && state[Id].Name != "オリ") {
-                        soundManager.TriggerSE("SE006");
+                        AudioManager.Instance.PlaySE("SE006");
                     } else {
-                        soundManager.TriggerSE("SE007");
+                        AudioManager.Instance.PlaySE("SE007");
                     }
                 } else {
-                    soundManager.TriggerSE("SE005");
+                    AudioManager.Instance.PlaySE("SE005");
                 }
             }
         }
@@ -337,7 +334,7 @@ public class Enemy : MonoBehaviour {
             float time = 0;
             _rigidbody2D.gravityScale = 0;
 
-            soundManager.TriggerSE("SE010");
+            AudioManager.Instance.PlaySE("SE010");
             while(time < 2) {
                 Vector3 goal = transform.position + Vector3.up * 0.5f;
                 time += Time.fixedDeltaTime * tsm.GetTimeScale();
@@ -345,7 +342,7 @@ public class Enemy : MonoBehaviour {
                 yield return null;
             }
 
-            soundManager.TriggerSE("SE011");
+            AudioManager.Instance.PlaySE("SE011");
 
             GenerateObj();
             StartCoroutine(DestroyAnim(10,5));
